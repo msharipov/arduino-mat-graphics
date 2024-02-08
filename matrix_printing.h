@@ -1,6 +1,8 @@
 #ifndef MATRIX_PRINTING_HPP
 #define MATRIX_PRINTING_HPP
 
+#include <stdint.h>
+
 static const bool DIGITS_35[10][15] = {
   {0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0},
   {1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 1, 0},
