@@ -1,7 +1,7 @@
 #include "LED_Matrix_Graphics.h"
 #include <stdint.h>
 
-static const bool DIGITS_35[10][15] = {
+const bool DIGITS_35[10][15] = {
   {0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0},
   {1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 1, 0},
   {1, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1},
@@ -14,7 +14,7 @@ static const bool DIGITS_35[10][15] = {
   {0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1}
 };
 
-static const bool SYMBOLS_34[26][12] = {
+const bool SYMBOLS_34[26][12] = {
   {1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0}, // A
   {1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1}, // B
   {1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0}, // C
@@ -69,8 +69,8 @@ void matrix_set_bit(uint32_t f[], const int8_t row, const int8_t col,
 void dig35_to_mat(uint32_t f[], const int8_t row, const int8_t col, 
                   uint8_t dig) {
 
-  for (size_t add_row = 0; add_row < 5; add_row++) {
-    for (size_t add_col = 0; add_col < 3; add_col++) {
+  for (std::size_t add_row = 0; add_row < 5; add_row++) {
+    for (std::size_t add_col = 0; add_col < 3; add_col++) {
       matrix_set_bit(f, row + add_row, col + add_col,
                      DIGITS_35[dig][add_col + add_row*3]);
     }
@@ -117,7 +117,7 @@ void mat_fill_rect(uint32_t f[], const int8_t row_l, const int8_t col_l,
 
 void mat_text_34(uint32_t f[], const bool symbols[][12], int8_t col_h,
                  int8_t col_l, const int8_t row, const uint8_t msg[], 
-                 const size_t msg_len, const uint8_t spacing,
+                 const std::size_t msg_len, const uint8_t spacing,
                  const int8_t step) {
 
   col_l = (col_l < 0) ? 0 : col_l;
