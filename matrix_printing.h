@@ -128,8 +128,8 @@ void mat_text_34(uint32_t f[], const bool symbols[][12], int8_t col_h,
   const int8_t block_width = 3 + spacing;
   int8_t col = col_h - (2 - step);
 
-  // If the text is outside of the bounds
-  // Removing the type cast causes incorrect integer promotion
+  // Skip the printing if the text is completely out of bounds.
+  // Warning: Removing the type cast causes incorrect integer promotion!
   if (step >= (int16_t)(msg_len*block_width - spacing)) {
     mat_fill_rect(f, row, col_l, row + 3, col_h, 0);
     return;
