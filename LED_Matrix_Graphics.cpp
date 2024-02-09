@@ -1,6 +1,4 @@
-#ifndef MATRIX_PRINTING_HPP
-#define MATRIX_PRINTING_HPP
-
+#include "LED_Matrix_Graphics.h"
 #include <stdint.h>
 
 static const bool DIGITS_35[10][15] = {
@@ -177,5 +175,3 @@ void mat_text_34(uint32_t f[], const bool symbols[][12], int8_t col_h,
     mat_fill_rect(f, row, col_l, row + 3, col - 1, 0);
   }
 }
-
-#endif
