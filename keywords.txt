@@ -4,3 +4,5 @@ sym34_to_mat	KEYWORD2
 sym34_to_mat_bnd	KEYWORD2
 mat_fill_rect	KEYWORD2
 mat_text_34	KEYWORD2
+DIGITS_35	LITERAL1
+SYMBOLS_34	LITERAL1
