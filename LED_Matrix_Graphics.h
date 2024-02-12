@@ -6,7 +6,7 @@
 
 extern const bool DIGITS_35[10][15];
 
-extern const bool SYMBOLS_34[26][12];
+extern const bool SYMBOLS_34[36][12];
 
 void matrix_set_bit(uint32_t f[], const int8_t row, const int8_t col,
                     const bool bit);
