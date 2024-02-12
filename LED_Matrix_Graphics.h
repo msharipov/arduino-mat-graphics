@@ -49,15 +49,10 @@ extern const bool DIGITS_35[10][15];
 extern const bool SYMBOLS_34[36][12];
 
 // Sets the LED at ([row], [col]) to the value of bit.
-void matrix_set_bit(uint32_t f[],
+void LMG_set_bit(uint32_t f[],
                     const int8_t row,
                     const int8_t col,
                     const bool bit);
-
-void dig35_to_mat(uint32_t f[],
-                  const int8_t row,
-                  const int8_t col,
-                  const uint8_t dig);
 
 // Draws a [width]-by-[height] symbol to the LED matrix with its bottom
 // right corner at coordinates given by [row] and [column]. All LEDs
@@ -95,7 +90,7 @@ void LMG_fill_rect(uint32_t f[],
 // [col_h], with [row] being the lowest row and [spacing] being the amount
 // of empty space between each symbol. [step] shifts the text inside of the
 // text box to the right (step<0) and to the left (step>0).
-void mat_text_34(uint32_t f[],
+void LMG_put_text_34(uint32_t f[],
                  const bool symbols[][12],
                  int8_t col_h,
                  int8_t col_l,

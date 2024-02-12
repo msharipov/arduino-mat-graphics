@@ -54,10 +54,10 @@ const bool SYMBOLS_34[36][12] = {
 };
 
 
-void matrix_set_bit(uint32_t f[],
-                    const int8_t row,
-                    const int8_t col,
-                    const bool bit) {
+void LMG_set_bit(uint32_t f[],
+                 const int8_t row,
+                 const int8_t col,
+                 const bool bit) {
   
   uint8_t q, r, pos;
   
@@ -80,20 +80,6 @@ void matrix_set_bit(uint32_t f[],
 }
 
 
-void dig35_to_mat(uint32_t f[],
-                  const int8_t row,
-                  const int8_t col, 
-                  const uint8_t dig) {
-
-  for (std::size_t add_row = 0; add_row < 5; add_row++) {
-    for (std::size_t add_col = 0; add_col < 3; add_col++) {
-      matrix_set_bit(f, row + add_row, col + add_col,
-                     DIGITS_35[dig][add_col + add_row*3]);
-    }
-  }
-}
-
-
 void LMG_put_sym(uint32_t f[],
                  const bool * symbol,
                  const int8_t row,
@@ -104,7 +90,7 @@ void LMG_put_sym(uint32_t f[],
   for (int8_t add_col = 0; add_col < width; add_col++) {
     for (int8_t add_row = 0; add_row < height; add_row++) {
       
-      matrix_set_bit(f, row + add_row, col + add_col, 
+      LMG_matrix_set_bit(f, row + add_row, col + add_col, 
                      *(symbol + sizeof(bool)*(add_col + add_row*width)));
     }
   }
@@ -134,7 +120,7 @@ void LMG_put_sym_bnd(uint32_t f[],
         continue;
       }
       
-      matrix_set_bit(f, row + add_row, col + add_col, 
+      LMG_set_bit(f, row + add_row, col + add_col, 
                      *(symbol + sizeof(bool)*(add_col + add_row*width)));
     }
   }
@@ -151,13 +137,13 @@ void LMG_fill_rect(uint32_t f[],
 
   for (int8_t col = col_l; col <= col_h; col++) {
     for (int8_t row = row_l; row <= row_h; row++) {
-      matrix_set_bit(f, row, col, bit);
+      LMG_set_bit(f, row, col, bit);
     }
   }
 }
 
 
-void mat_text_34(uint32_t f[],
+void LMG_put_text_34(uint32_t f[],
                  const bool symbols[][12],
                  int8_t col_h,
                  int8_t col_l,
