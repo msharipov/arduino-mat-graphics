@@ -94,29 +94,6 @@ void dig35_to_mat(uint32_t f[],
 }
 
 
-void sym34_to_mat(uint32_t f[],
-                  const int8_t row,
-                  const int8_t col,
-                  const bool * symbols,
-                  const uint8_t sym) {
-  
-  LMG_put_sym(f, symbols + static_cast<size_t>(12*sym), row, col, 3, 4);
-}
-
-
-void sym34_to_mat_bnd(uint32_t f[],
-                      const int8_t row,
-                      const int8_t col,
-                      const bool * symbols,
-                      const uint8_t sym,
-                      const int8_t end,
-                      const int8_t start) {
-  
-  LMG_put_sym_bnd(f, symbols + static_cast<size_t>(12*sym), row, col, 3, 4,
-                  row, start, row + 3, end);
-}
-
-
 void LMG_put_sym(uint32_t f[],
                  const bool * symbol,
                  const int8_t row,
@@ -165,7 +142,7 @@ void LMG_put_sym_bnd(uint32_t f[],
 
 
 
-void mat_fill_rect(uint32_t f[],
+void LMG_fill_rect(uint32_t f[],
                    const int8_t row_l,
                    const int8_t col_l,
                    const int8_t row_h,
@@ -199,13 +176,13 @@ void mat_text_34(uint32_t f[],
   // Skip the printing if the text is completely out of bounds.
   // Warning: Removing the type cast causes incorrect integer promotion!
   if (step >= (int16_t)(msg_len*block_width - spacing)) {
-    mat_fill_rect(f, row, col_l, row + 3, col_h, 0);
+    LMG_fill_rect(f, row, col_l, row + 3, col_h, 0);
     return;
   }
 
   // Left-side spacing
   if (step < 0) {
-    mat_fill_rect(f, row, col + 3, row + 3, col_h, 0);
+    LMG_fill_rect(f, row, col + 3, row + 3, col_h, 0);
   }
 
   for (int8_t sym = 0; sym < msg_len; sym++) {
@@ -221,7 +198,7 @@ void mat_text_34(uint32_t f[],
 
     // Tail spacing before first symbol
     if (spacing != 0 && col_h - col >= 2 && col_h - col < block_width) {
-      mat_fill_rect(f, row, col + 3, row + 3, col_h, 0);
+      LMG_fill_rect(f, row, col + 3, row + 3, col_h, 0);
     }
 
     LMG_put_sym_bnd(f, symbols[msg[sym]], row, col, 3, 4,
@@ -235,7 +212,7 @@ void mat_text_34(uint32_t f[],
         spc_end = col_l;
       }
 
-      mat_fill_rect(f, row, spc_end, row + 3, col - 1, 0);
+      LMG_fill_rect(f, row, spc_end, row + 3, col - 1, 0);
     }
 
     col -= block_width;
@@ -243,6 +220,6 @@ void mat_text_34(uint32_t f[],
 
   // Right-side space
   if (col > col_l) {
-    mat_fill_rect(f, row, col_l, row + 3, col - 1, 0);
+    LMG_fill_rect(f, row, col_l, row + 3, col - 1, 0);
   }
 }
