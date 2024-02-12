@@ -9,16 +9,21 @@ uint32_t start;
 void setup() {
   matrix.begin();
   start = millis();
-  matrix_set_bit(frame, 3, 4, 1);
+  LMG_set_bit(frame, 3, 4, 1);
 }
 
 void loop() {
   uint32_t diff = millis() - start;
-  uint8_t first = (diff / 10000) % 10,
-          second = (diff / 1000) % 10,
-          third = (diff / 100) % 10;
-  dig35_to_mat(frame, 3, 9, first);
-  dig35_to_mat(frame, 3, 5, second);
-  dig35_to_mat(frame, 3, 0, third);
+  uint8_t X = (diff / 10000) % 10,
+          Y = (diff / 1000) % 10,
+          Z = (diff / 100) % 10;
+  
+  if (X == 0) {
+    LMG_fill_rect(frame, 3, 9, 7, 11, 0);
+  } else {
+    LMG_put_sym(frame, DIGITS_35[X], 3, 9, 3, 5);
+  }
+  LMG_put_sym(frame, DIGITS_35[Y], 3, 5, 3, 5);
+  LMG_put_sym(frame, DIGITS_35[Z], 3, 0, 3, 5);
   matrix.loadFrame(frame);
 }

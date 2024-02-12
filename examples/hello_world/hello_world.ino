@@ -14,9 +14,9 @@ void setup() {
 
 void loop() {
   
-  mat_text_34(frame, SYMBOLS_34, 11, 0, 4, HELLO, 5, 1, step - 6);
-  mat_text_34(frame, SYMBOLS_34, 11, 0, 0, WORLD, 5, 1, step - 6);
+  LMG_put_text_34(frame, SYMBOLS_34, 11, 0, 4, HELLO, 5, 1, step - 6);
+  LMG_put_text_34(frame, SYMBOLS_34, 11, 0, 0, WORLD, 5, 1, step - 6);
   matrix.loadFrame(frame);
   step = (step + 1) % 25;
-  delay(500);
+  delay(300);
 }
