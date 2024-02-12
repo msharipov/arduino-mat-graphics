@@ -49,11 +49,13 @@ const bool SYMBOLS_34[36][12] = {
   {1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1}, // 5
   {1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1}, // 6
   {0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1}, // 7
-  {1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0}, // 8
+  {1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1}, // 8
   {1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1}  // 9
 };
 
-void matrix_set_bit(uint32_t f[], const int8_t row, const int8_t col,
+void matrix_set_bit(uint32_t f[],
+                    const int8_t row,
+                    const int8_t col,
                     const bool bit) {
   
   uint8_t q, r, pos;
@@ -76,8 +78,10 @@ void matrix_set_bit(uint32_t f[], const int8_t row, const int8_t col,
   }
 }
 
-void dig35_to_mat(uint32_t f[], const int8_t row, const int8_t col, 
-                  uint8_t dig) {
+void dig35_to_mat(uint32_t f[],
+                  const int8_t row,
+                  const int8_t col, 
+                  const uint8_t dig) {
 
   for (std::size_t add_row = 0; add_row < 5; add_row++) {
     for (std::size_t add_col = 0; add_col < 3; add_col++) {
@@ -87,8 +91,11 @@ void dig35_to_mat(uint32_t f[], const int8_t row, const int8_t col,
   }
 }
 
-void sym34_to_mat(uint32_t f[], const int8_t row, const int8_t col,
-                  const bool symbols[][12], const uint8_t sym) {
+void sym34_to_mat(uint32_t f[],
+                  const int8_t row,
+                  const int8_t col,
+                  const bool symbols[][12],
+                  const uint8_t sym) {
   
   for (int8_t add_row = 0; add_row < 4; add_row++) {
     for (int8_t add_col = 0; add_col < 3; add_col++) {
@@ -98,9 +105,13 @@ void sym34_to_mat(uint32_t f[], const int8_t row, const int8_t col,
   }
 }
 
-void sym34_to_mat_bnd(uint32_t f[], const int8_t row, const int8_t col,
-                      const bool symbols[][12], const uint8_t sym,
-                      const int8_t end, const int8_t start) {
+void sym34_to_mat_bnd(uint32_t f[],
+                      const int8_t row,
+                      const int8_t col,
+                      const bool symbols[][12],
+                      const uint8_t sym,
+                      const int8_t end,
+                      const int8_t start) {
   
   for (int8_t add_col = 0; add_col < 3; add_col++) {
 
@@ -115,8 +126,12 @@ void sym34_to_mat_bnd(uint32_t f[], const int8_t row, const int8_t col,
   }
 }
 
-void mat_fill_rect(uint32_t f[], const int8_t row_l, const int8_t col_l,
-                   const int8_t row_h, const int8_t col_h, bool bit) {
+void mat_fill_rect(uint32_t f[],
+                   const int8_t row_l,
+                   const int8_t col_l,
+                   const int8_t row_h,
+                   const int8_t col_h,
+                   const bool bit) {
 
   for (int8_t col = col_l; col <= col_h; col++) {
     for (int8_t row = row_l; row <= row_h; row++) {
@@ -125,9 +140,14 @@ void mat_fill_rect(uint32_t f[], const int8_t row_l, const int8_t col_l,
   }
 }
 
-void mat_text_34(uint32_t f[], const bool symbols[][12], int8_t col_h,
-                 int8_t col_l, const int8_t row, const uint8_t msg[], 
-                 const std::size_t msg_len, const uint8_t spacing,
+void mat_text_34(uint32_t f[],
+                 const bool symbols[][12],
+                 int8_t col_h,
+                 int8_t col_l,
+                 const int8_t row,
+                 const uint8_t msg[], 
+                 const std::size_t msg_len,
+                 const uint8_t spacing,
                  const int8_t step) {
 
   col_l = (col_l < 0) ? 0 : col_l;
