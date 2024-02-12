@@ -90,7 +90,7 @@ void LMG_put_sym(uint32_t f[],
   for (int8_t add_col = 0; add_col < width; add_col++) {
     for (int8_t add_row = 0; add_row < height; add_row++) {
       
-      LMG_matrix_set_bit(f, row + add_row, col + add_col, 
+      LMG_set_bit(f, row + add_row, col + add_col, 
                      *(symbol + sizeof(bool)*(add_col + add_row*width)));
     }
   }
