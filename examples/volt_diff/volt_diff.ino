@@ -21,29 +21,29 @@ void loop() {
     rel_voltage = -rel_voltage;
   }
 
-  uint8_t first = rel_voltage * 10 / 1023,
-          second = rel_voltage * 100 / 1023 % 10,
-          third = rel_voltage * 1000 / 1023 % 10;
+  uint8_t X = rel_voltage * 10 / 1023,
+          Y = rel_voltage * 100 / 1023 % 10,
+          Z = rel_voltage * 1000 / 1023 % 10;
 
   frame[0] = 0, frame[1] = 0, frame[2] = 0;
 
   if (rel_voltage == 1023) {
 
-    dig35_to_mat(frame, 3, 9, 1);
-    matrix_set_bit(frame, 3, 7, 1);
-    dig35_to_mat(frame, 3, 4, 0);
-    dig35_to_mat(frame, 3, 0, 0);
+    LMG_put_sym(frame, DIGITS_35[1], 3, 9, 3, 5);
+    LMG_set_bit(frame, 3, 7, 1);
+    LMG_put_sym(frame, DIGITS_35[0], 3, 4, 3, 5);
+    LMG_put_sym(frame, DIGITS_35[0], 3, 0, 3, 5);
 
   } else {
 
-    matrix_set_bit(frame, 3, 11, 1);
-    dig35_to_mat(frame, 3, 8, first);
-    dig35_to_mat(frame, 3, 4, second);
-    dig35_to_mat(frame, 3, 0, third);
+    LMG_set_bit(frame, 3, 11, 1);
+    LMG_put_sym(frame, DIGITS_35[X], 3, 8, 3, 5);
+    LMG_put_sym(frame, DIGITS_35[Y], 3, 4, 3, 5);
+    LMG_put_sym(frame, DIGITS_35[Z], 3, 0, 3, 5);
   }
 
   if (negative) {
-    mat_fill_rect(frame, 1, 8, 1, 10, 1); 
+    LMG_fill_rect(frame, 1, 8, 1, 10, 1); 
   }
 
   matrix.loadFrame(frame);

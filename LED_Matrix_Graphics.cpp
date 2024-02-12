@@ -4,7 +4,7 @@
 const bool DIGITS_35[10][15] = {
   {0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0},
   {1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 1, 0},
-  {1, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1},
+  {1, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1},
   {1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1},
   {1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1},
   {1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1},
@@ -15,37 +15,6 @@ const bool DIGITS_35[10][15] = {
 };
 
 const bool SYMBOLS_34[36][12] = {
-/*
- |  #  | #   |  ## | ##  |  ## |  ## | 
- | # # | ### | #   | # # | ### | #   |
- | ### | # # | #   | # # | #   | ### |
- | # # | ### |  ## | ##  |  ## | #   |
-
- |  ## | # # | ### | ### | # # | #   |
- | #   | # # |  #  |  #  | ##  | #   |
- | # # | ### |  #  |  #  | # # | #   |
- | ### | # # | ### | #   | # # | ### |
-
- | # # |     | ### | ### |  ## | ### |
- | ### | ### | # # | # # | # # | # # |
- | # # | # # | # # | ### | ##  | ##  |
- | # # | # # | ### | #   |   # | # # |
-
- | ### | ### | # # | # # |     | # # |
- | #   |  #  | # # | # # | # # |  #  |
- |   # |  #  | # # | # # | ### |  #  |
- | ### |  #  | ### |  #  | ### | # # |
-
- | # # | ### |  #  |  #  | ##  | ### |
- | # # |  ## | # # | ##  |   # |   # |
- |  #  | ##  | # # |  #  | #   |   # |
- |  #  | ### |  #  | ### | ### | ### |
-
- | # # | ### | ### | ### |  #  | ### |
- | # # | #   | #   |   # | # # | ### |
- | ### |   # | ### |  #  |  #  |   # |
- |   # | ### | ### |  #  | # # | ### |
-*/
   {1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0}, // A
   {1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1}, // B
   {1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0}, // C
@@ -80,12 +49,15 @@ const bool SYMBOLS_34[36][12] = {
   {1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1}, // 5
   {1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1}, // 6
   {0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1}, // 7
-  {1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0}, // 8
+  {1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1}, // 8
   {1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1}  // 9
 };
 
-void matrix_set_bit(uint32_t f[], const int8_t row, const int8_t col,
-                    const bool bit) {
+
+void LMG_set_bit(uint32_t f[],
+                 const int8_t row,
+                 const int8_t col,
+                 const bool bit) {
   
   uint8_t q, r, pos;
   
@@ -107,58 +79,78 @@ void matrix_set_bit(uint32_t f[], const int8_t row, const int8_t col,
   }
 }
 
-void dig35_to_mat(uint32_t f[], const int8_t row, const int8_t col, 
-                  uint8_t dig) {
 
-  for (std::size_t add_row = 0; add_row < 5; add_row++) {
-    for (std::size_t add_col = 0; add_col < 3; add_col++) {
-      matrix_set_bit(f, row + add_row, col + add_col,
-                     DIGITS_35[dig][add_col + add_row*3]);
+void LMG_put_sym(uint32_t f[],
+                 const bool * symbol,
+                 const int8_t row,
+                 const int8_t col,
+                 const int8_t width,
+                 const int8_t height) {
+  
+  for (int8_t add_col = 0; add_col < width; add_col++) {
+    for (int8_t add_row = 0; add_row < height; add_row++) {
+      
+      LMG_set_bit(f, row + add_row, col + add_col, 
+                     *(symbol + sizeof(bool)*(add_col + add_row*width)));
     }
   }
 }
 
-void sym34_to_mat(uint32_t f[], const int8_t row, const int8_t col,
-                  const bool symbols[][12], const uint8_t sym) {
-  
-  for (int8_t add_row = 0; add_row < 4; add_row++) {
-    for (int8_t add_col = 0; add_col < 3; add_col++) {
-      matrix_set_bit(f, row + add_row, col + add_col, 
-                     symbols[sym][add_col + add_row*3]);
-    }
-  }
-}
 
-void sym34_to_mat_bnd(uint32_t f[], const int8_t row, const int8_t col,
-                      const bool symbols[][12], const uint8_t sym,
-                      const int8_t end, const int8_t start) {
-  
-  for (int8_t add_col = 0; add_col < 3; add_col++) {
+void LMG_put_sym_bnd(uint32_t f[],
+                     const bool * symbol,
+                     const int8_t row,
+                     const int8_t col,
+                     const int8_t width,
+                     const int8_t height,
+                     const int8_t row_l,
+                     const int8_t col_l,
+                     const int8_t row_h,
+                     const int8_t col_h) {
 
-    if (col + add_col > end || col + add_col < start) {
+  for (int8_t add_col = 0; add_col < width; add_col++) {
+
+    if (col + add_col > col_h || col + add_col < col_l) {
       continue;
     }
 
-    for (int8_t add_row = 0; add_row < 4; add_row++) {
-      matrix_set_bit(f, row + add_row, col + add_col, 
-                     symbols[sym][add_col + add_row*3]);
+    for (int8_t add_row = 0; add_row < height; add_row++) {
+
+      if (row + add_row > row_h || row + add_row < row_l) {
+        continue;
+      }
+      
+      LMG_set_bit(f, row + add_row, col + add_col, 
+                     *(symbol + sizeof(bool)*(add_col + add_row*width)));
     }
   }
 }
 
-void mat_fill_rect(uint32_t f[], const int8_t row_l, const int8_t col_l,
-                   const int8_t row_h, const int8_t col_h, bool bit) {
+
+
+void LMG_fill_rect(uint32_t f[],
+                   const int8_t row_l,
+                   const int8_t col_l,
+                   const int8_t row_h,
+                   const int8_t col_h,
+                   const bool bit) {
 
   for (int8_t col = col_l; col <= col_h; col++) {
     for (int8_t row = row_l; row <= row_h; row++) {
-      matrix_set_bit(f, row, col, bit);
+      LMG_set_bit(f, row, col, bit);
     }
   }
 }
 
-void mat_text_34(uint32_t f[], const bool symbols[][12], int8_t col_h,
-                 int8_t col_l, const int8_t row, const uint8_t msg[], 
-                 const std::size_t msg_len, const uint8_t spacing,
+
+void LMG_put_text_34(uint32_t f[],
+                 const bool symbols[][12],
+                 int8_t col_h,
+                 int8_t col_l,
+                 const int8_t row,
+                 const uint8_t msg[], 
+                 const std::size_t msg_len,
+                 const uint8_t spacing,
                  const int8_t step) {
 
   col_l = (col_l < 0) ? 0 : col_l;
@@ -170,13 +162,13 @@ void mat_text_34(uint32_t f[], const bool symbols[][12], int8_t col_h,
   // Skip the printing if the text is completely out of bounds.
   // Warning: Removing the type cast causes incorrect integer promotion!
   if (step >= (int16_t)(msg_len*block_width - spacing)) {
-    mat_fill_rect(f, row, col_l, row + 3, col_h, 0);
+    LMG_fill_rect(f, row, col_l, row + 3, col_h, 0);
     return;
   }
 
   // Left-side spacing
   if (step < 0) {
-    mat_fill_rect(f, row, col + 3, row + 3, col_h, 0);
+    LMG_fill_rect(f, row, col + 3, row + 3, col_h, 0);
   }
 
   for (int8_t sym = 0; sym < msg_len; sym++) {
@@ -192,10 +184,11 @@ void mat_text_34(uint32_t f[], const bool symbols[][12], int8_t col_h,
 
     // Tail spacing before first symbol
     if (spacing != 0 && col_h - col >= 2 && col_h - col < block_width) {
-      mat_fill_rect(f, row, col + 3, row + 3, col_h, 0);
+      LMG_fill_rect(f, row, col + 3, row + 3, col_h, 0);
     }
 
-    sym34_to_mat_bnd(f, row, col, symbols, msg[sym], col_h, col_l);
+    LMG_put_sym_bnd(f, symbols[msg[sym]], row, col, 3, 4,
+                    row, col_l, row + 3, col_h);
     
     // Tail spacing
     if (spacing != 0 && col > col_l) {
@@ -205,7 +198,7 @@ void mat_text_34(uint32_t f[], const bool symbols[][12], int8_t col_h,
         spc_end = col_l;
       }
 
-      mat_fill_rect(f, row, spc_end, row + 3, col - 1, 0);
+      LMG_fill_rect(f, row, spc_end, row + 3, col - 1, 0);
     }
 
     col -= block_width;
@@ -213,6 +206,6 @@ void mat_text_34(uint32_t f[], const bool symbols[][12], int8_t col_h,
 
   // Right-side space
   if (col > col_l) {
-    mat_fill_rect(f, row, col_l, row + 3, col - 1, 0);
+    LMG_fill_rect(f, row, col_l, row + 3, col - 1, 0);
   }
 }
