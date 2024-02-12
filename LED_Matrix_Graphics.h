@@ -62,13 +62,13 @@ void dig35_to_mat(uint32_t f[],
 void sym34_to_mat(uint32_t f[],
                   const int8_t row,
                   const int8_t col,
-                  const bool symbols[][12],
+                  const bool * symbols,
                   const uint8_t sym);
 
 void sym34_to_mat_bnd(uint32_t f[],
                       const int8_t row,
                       const int8_t col,
-                      const bool symbols[][12],
+                      const bool * symbols,
                       const uint8_t sym,
                       const int8_t end,
                       const int8_t start);
@@ -83,14 +83,18 @@ void LMG_put_sym(uint32_t f[],
                  const int8_t width,
                  const int8_t height);
 
-// Works like LMG_put_sym() but skips every position that is not within the
-// confines of the LED matrix.
+// Works like LMG_put_sym() but skips every position that is outside of the
+// rectangle given by vertices ([row_l], [col_l]) and ([row_h], [col_h]).
 void LMG_put_sym_bnd(uint32_t f[],
                      const bool * symbols,
                      const int8_t row,
                      const int8_t col,
                      const int8_t width,
-                     const int8_t height);
+                     const int8_t height,
+                     const int8_t row_l,
+                     const int8_t col_l,
+                     const int8_t row_h,
+                     const int8_t col_h);
 
 // Sets all LEDs in a rectangle given by vertices ([row_l], [col_l]) and
 // ([row_h], [col_h]) to the value of [bit].

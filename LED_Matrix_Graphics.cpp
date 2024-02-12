@@ -97,42 +97,28 @@ void dig35_to_mat(uint32_t f[],
 void sym34_to_mat(uint32_t f[],
                   const int8_t row,
                   const int8_t col,
-                  const bool symbols[][12],
+                  const bool * symbols,
                   const uint8_t sym) {
   
-  for (int8_t add_row = 0; add_row < 4; add_row++) {
-    for (int8_t add_col = 0; add_col < 3; add_col++) {
-      matrix_set_bit(f, row + add_row, col + add_col, 
-                     symbols[sym][add_col + add_row*3]);
-    }
-  }
+  LMG_put_sym(f, symbols + static_cast<size_t>(12*sym), row, col, 3, 4);
 }
 
 
 void sym34_to_mat_bnd(uint32_t f[],
                       const int8_t row,
                       const int8_t col,
-                      const bool symbols[][12],
+                      const bool * symbols,
                       const uint8_t sym,
                       const int8_t end,
                       const int8_t start) {
   
-  for (int8_t add_col = 0; add_col < 3; add_col++) {
-
-    if (col + add_col > end || col + add_col < start) {
-      continue;
-    }
-
-    for (int8_t add_row = 0; add_row < 4; add_row++) {
-      matrix_set_bit(f, row + add_row, col + add_col, 
-                     symbols[sym][add_col + add_row*3]);
-    }
-  }
+  LMG_put_sym_bnd(f, symbols + static_cast<size_t>(12*sym), row, col, 3, 4,
+                  row, start, row + 3, end);
 }
 
 
 void LMG_put_sym(uint32_t f[],
-                 const bool * symbols,
+                 const bool * symbol,
                  const int8_t row,
                  const int8_t col,
                  const int8_t width,
@@ -142,33 +128,37 @@ void LMG_put_sym(uint32_t f[],
     for (int8_t add_row = 0; add_row < height; add_row++) {
       
       matrix_set_bit(f, row + add_row, col + add_col, 
-                      symbols[add_col + add_row*width]);
+                     *(symbol + sizeof(bool)*(add_col + add_row*width)));
     }
   }
 }
 
 
 void LMG_put_sym_bnd(uint32_t f[],
-                     const bool * symbols,
+                     const bool * symbol,
                      const int8_t row,
                      const int8_t col,
                      const int8_t width,
-                     const int8_t height) {
+                     const int8_t height,
+                     const int8_t row_l,
+                     const int8_t col_l,
+                     const int8_t row_h,
+                     const int8_t col_h) {
 
   for (int8_t add_col = 0; add_col < width; add_col++) {
 
-    if (col + add_col > 11 || col + add_col < 0) {
+    if (col + add_col > col_h || col + add_col < col_l) {
       continue;
     }
 
     for (int8_t add_row = 0; add_row < height; add_row++) {
 
-      if (row + add_row > 7 || row + add_row < 0) {
+      if (row + add_row > row_h || row + add_row < row_l) {
         continue;
       }
       
       matrix_set_bit(f, row + add_row, col + add_col, 
-                      symbols[add_col + add_row*width]);
+                     *(symbol + sizeof(bool)*(add_col + add_row*width)));
     }
   }
 }
@@ -234,7 +224,8 @@ void mat_text_34(uint32_t f[],
       mat_fill_rect(f, row, col + 3, row + 3, col_h, 0);
     }
 
-    sym34_to_mat_bnd(f, row, col, symbols, msg[sym], col_h, col_l);
+    LMG_put_sym_bnd(f, symbols[msg[sym]], row, col, 3, 4,
+                    row, col_l, row + 3, col_h);
     
     // Tail spacing
     if (spacing != 0 && col > col_l) {
