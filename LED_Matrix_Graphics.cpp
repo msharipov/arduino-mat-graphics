@@ -80,6 +80,27 @@ void LMG_set_bit(uint32_t f[],
 }
 
 
+void LMG_invert_bit(uint32_t f[],
+                    const int8_t row,
+                    const int8_t col) {
+
+  uint8_t q, r, pos;
+  
+  pos = row*12 + col;
+
+  if (pos < 32) {
+    q = 2;
+  } else if (pos < 64) {
+    q = 1;
+  } else {
+    q = 0;
+  }
+  r = pos % 32;
+  
+  f[q] ^= (1UL << r);
+}
+
+
 void LMG_put_sym(uint32_t f[],
                  const bool * symbol,
                  const int8_t row,
@@ -138,6 +159,20 @@ void LMG_fill_rect(uint32_t f[],
   for (int8_t col = col_l; col <= col_h; col++) {
     for (int8_t row = row_l; row <= row_h; row++) {
       LMG_set_bit(f, row, col, bit);
+    }
+  }
+}
+
+
+void LMG_invert_rect(uint32_t f[],
+                   const int8_t row_l,
+                   const int8_t col_l,
+                   const int8_t row_h,
+                   const int8_t col_h) {
+
+  for (int8_t col = col_l; col <= col_h; col++) {
+    for (int8_t row = row_l; row <= row_h; row++) {
+      LMG_invert_bit(f, row, col);
     }
   }
 }
