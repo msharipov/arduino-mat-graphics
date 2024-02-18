@@ -54,6 +54,11 @@ void LMG_set_bit(uint32_t f[],
                     const int8_t col,
                     const bool bit);
 
+// Inverts the state of the LED at ([row], [col]).
+void LMG_invert_bit(uint32_t f[],
+                    const int8_t row,
+                    const int8_t col);
+
 // Draws a [width]-by-[height] symbol to the LED matrix with its bottom
 // right corner at coordinates given by [row] and [column]. All LEDs
 // used by the symbol must lie within the matrix.
@@ -85,6 +90,14 @@ void LMG_fill_rect(uint32_t f[],
                    const int8_t row_h,
                    const int8_t col_h,
                    const bool bit);
+
+// Inverts all LEDs in a rectangle given by vertices ([row_l], [col_l]) and
+// ([row_h], [col_h]).
+void LMG_invert_rect(uint32_t f[],
+                   const int8_t row_l,
+                   const int8_t col_l,
+                   const int8_t row_h,
+                   const int8_t col_h);
 
 // Prints [msg] of length [msg_len] inside of a text box between [col_l] and
 // [col_h], with [row] being the lowest row and [spacing] being the amount
