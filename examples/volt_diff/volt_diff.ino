@@ -1,3 +1,9 @@
+/* This program allows you to quickly measure voltage using the Arduino. The
+ * program will display the potential difference between pins A1 and A2 as a
+ * fraction of the difference between 5V and GND on the LED matrix. If the
+ * difference happens to be negative, a minus sign will also be displayed.
+*/ 
+
 #include "Arduino_LED_Matrix.h"
 #include <stdint.h>
 #include <LED_Matrix_Graphics.h>
