@@ -4,12 +4,9 @@
 
 namespace LMG {
 
-uint32_t &Frame::operator[](size_t i) { return data[i]; }
-
 const uint32_t *Frame::getData() { return data.data(); }
 
-void Frame::set_bit(Frame f, const int8_t row, const int8_t col,
-                    const bool bit) {
+void Frame::set_bit(const int8_t row, const int8_t col, const bool bit) {
 
   uint8_t q, r, pos;
 
@@ -25,13 +22,13 @@ void Frame::set_bit(Frame f, const int8_t row, const int8_t col,
   r = pos % 32;
 
   if (bit) {
-    f[q] |= (1UL << r);
+    data[q] |= (1UL << r);
   } else {
-    f[q] &= ~(1UL << r);
+    data[q] &= ~(1UL << r);
   }
 }
 
-void Frame::invert_bit(Frame f, const int8_t row, const int8_t col) {
+void Frame::invert_bit(const int8_t row, const int8_t col) {
 
   uint8_t q, r, pos;
 
@@ -46,26 +43,25 @@ void Frame::invert_bit(Frame f, const int8_t row, const int8_t col) {
   }
   r = pos % 32;
 
-  f[q] ^= (1UL << r);
+  data[q] ^= (1UL << r);
 }
 
-void Frame::put_sym(Frame f, const bool *symbol, const int8_t row,
-                    const int8_t col, const int8_t width, const int8_t height) {
+void Frame::put_sym(const bool *symbol, const int8_t row, const int8_t col,
+                    const int8_t width, const int8_t height) {
 
   for (int8_t add_col = 0; add_col < width; add_col++) {
     for (int8_t add_row = 0; add_row < height; add_row++) {
 
-      set_bit(f, row + add_row, col + add_col,
+      set_bit(row + add_row, col + add_col,
               *(symbol + sizeof(bool) * (add_col + add_row * width)));
     }
   }
 }
 
-void Frame::put_sym_bnd(Frame f, const bool *symbol, const int8_t row,
-                        const int8_t col, const int8_t width,
-                        const int8_t height, const int8_t row_l,
-                        const int8_t col_l, const int8_t row_h,
-                        const int8_t col_h) {
+void Frame::put_sym_bnd(const bool *symbol, const int8_t row, const int8_t col,
+                        const int8_t width, const int8_t height,
+                        const int8_t row_l, const int8_t col_l,
+                        const int8_t row_h, const int8_t col_h) {
 
   for (int8_t add_col = 0; add_col < width; add_col++) {
 
@@ -79,34 +75,34 @@ void Frame::put_sym_bnd(Frame f, const bool *symbol, const int8_t row,
         continue;
       }
 
-      set_bit(f, row + add_row, col + add_col,
+      set_bit(row + add_row, col + add_col,
               *(symbol + sizeof(bool) * (add_col + add_row * width)));
     }
   }
 }
 
-void Frame::fill_rect(Frame f, const int8_t row_l, const int8_t col_l,
+void Frame::fill_rect(const int8_t row_l, const int8_t col_l,
                       const int8_t row_h, const int8_t col_h, const bool bit) {
 
   for (int8_t col = col_l; col <= col_h; col++) {
     for (int8_t row = row_l; row <= row_h; row++) {
-      set_bit(f, row, col, bit);
+      set_bit(row, col, bit);
     }
   }
 }
 
-void Frame::invert_rect(Frame f, const int8_t row_l, const int8_t col_l,
+void Frame::invert_rect(const int8_t row_l, const int8_t col_l,
                         const int8_t row_h, const int8_t col_h) {
 
   for (int8_t col = col_l; col <= col_h; col++) {
     for (int8_t row = row_l; row <= row_h; row++) {
-      invert_bit(f, row, col);
+      invert_bit(row, col);
     }
   }
 }
 
-void Frame::draw_text_3_4(Frame f, const bool symbols[][12], int8_t col_h,
-                          int8_t col_l, const int8_t row, const uint8_t msg[],
+void Frame::draw_text_3_4(const bool symbols[][12], int8_t col_h, int8_t col_l,
+                          const int8_t row, const uint8_t msg[],
                           const std::size_t msg_len, const uint8_t spacing,
                           const int8_t step) {
 
@@ -119,13 +115,13 @@ void Frame::draw_text_3_4(Frame f, const bool symbols[][12], int8_t col_h,
   // Skip the printing if the text is completely out of bounds.
   // Warning: Removing the type cast causes incorrect integer promotion!
   if (step >= (int16_t)(msg_len * block_width - spacing)) {
-    fill_rect(f, row, col_l, row + 3, col_h, 0);
+    fill_rect(row, col_l, row + 3, col_h, 0);
     return;
   }
 
   // Left-side spacing
   if (step < 0) {
-    fill_rect(f, row, col + 3, row + 3, col_h, 0);
+    fill_rect(row, col + 3, row + 3, col_h, 0);
   }
 
   for (int8_t sym = 0; sym < msg_len; sym++) {
@@ -141,11 +137,10 @@ void Frame::draw_text_3_4(Frame f, const bool symbols[][12], int8_t col_h,
 
     // Tail spacing before first symbol
     if (spacing != 0 && col_h - col >= 2 && col_h - col < block_width) {
-      fill_rect(f, row, col + 3, row + 3, col_h, 0);
+      fill_rect(row, col + 3, row + 3, col_h, 0);
     }
 
-    put_sym_bnd(f, symbols[msg[sym]], row, col, 3, 4, row, col_l, row + 3,
-                col_h);
+    put_sym_bnd(symbols[msg[sym]], row, col, 3, 4, row, col_l, row + 3, col_h);
 
     // Tail spacing
     if (spacing != 0 && col > col_l) {
@@ -155,7 +150,7 @@ void Frame::draw_text_3_4(Frame f, const bool symbols[][12], int8_t col_h,
         spc_end = col_l;
       }
 
-      fill_rect(f, row, spc_end, row + 3, col - 1, 0);
+      fill_rect(row, spc_end, row + 3, col - 1, 0);
     }
 
     col -= block_width;
@@ -163,7 +158,7 @@ void Frame::draw_text_3_4(Frame f, const bool symbols[][12], int8_t col_h,
 
   // Right-side space
   if (col > col_l) {
-    fill_rect(f, row, col_l, row + 3, col - 1, 0);
+    fill_rect(row, col_l, row + 3, col - 1, 0);
   }
 }
 
