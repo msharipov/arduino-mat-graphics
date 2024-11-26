@@ -1,9 +1,15 @@
 #include "LED_Matrix_Graphics.h"
+#include <cstdint>
 #include <stdint.h>
 
 namespace LMG {
 
-void set_bit(frame f, const int8_t row, const int8_t col, const bool bit) {
+uint32_t &Frame::operator[](size_t i) { return data[i]; }
+
+const uint32_t *Frame::getData() { return data.data(); }
+
+void Frame::set_bit(Frame f, const int8_t row, const int8_t col,
+                    const bool bit) {
 
   uint8_t q, r, pos;
 
@@ -25,7 +31,7 @@ void set_bit(frame f, const int8_t row, const int8_t col, const bool bit) {
   }
 }
 
-void invert_bit(frame f, const int8_t row, const int8_t col) {
+void Frame::invert_bit(Frame f, const int8_t row, const int8_t col) {
 
   uint8_t q, r, pos;
 
@@ -43,8 +49,8 @@ void invert_bit(frame f, const int8_t row, const int8_t col) {
   f[q] ^= (1UL << r);
 }
 
-void put_sym(frame f, const bool *symbol, const int8_t row, const int8_t col,
-             const int8_t width, const int8_t height) {
+void Frame::put_sym(Frame f, const bool *symbol, const int8_t row,
+                    const int8_t col, const int8_t width, const int8_t height) {
 
   for (int8_t add_col = 0; add_col < width; add_col++) {
     for (int8_t add_row = 0; add_row < height; add_row++) {
@@ -55,10 +61,11 @@ void put_sym(frame f, const bool *symbol, const int8_t row, const int8_t col,
   }
 }
 
-void put_sym_bnd(frame f, const bool *symbol, const int8_t row,
-                 const int8_t col, const int8_t width, const int8_t height,
-                 const int8_t row_l, const int8_t col_l, const int8_t row_h,
-                 const int8_t col_h) {
+void Frame::put_sym_bnd(Frame f, const bool *symbol, const int8_t row,
+                        const int8_t col, const int8_t width,
+                        const int8_t height, const int8_t row_l,
+                        const int8_t col_l, const int8_t row_h,
+                        const int8_t col_h) {
 
   for (int8_t add_col = 0; add_col < width; add_col++) {
 
@@ -78,8 +85,8 @@ void put_sym_bnd(frame f, const bool *symbol, const int8_t row,
   }
 }
 
-void fill_rect(frame f, const int8_t row_l, const int8_t col_l,
-               const int8_t row_h, const int8_t col_h, const bool bit) {
+void Frame::fill_rect(Frame f, const int8_t row_l, const int8_t col_l,
+                      const int8_t row_h, const int8_t col_h, const bool bit) {
 
   for (int8_t col = col_l; col <= col_h; col++) {
     for (int8_t row = row_l; row <= row_h; row++) {
@@ -88,8 +95,8 @@ void fill_rect(frame f, const int8_t row_l, const int8_t col_l,
   }
 }
 
-void invert_rect(frame f, const int8_t row_l, const int8_t col_l,
-                 const int8_t row_h, const int8_t col_h) {
+void Frame::invert_rect(Frame f, const int8_t row_l, const int8_t col_l,
+                        const int8_t row_h, const int8_t col_h) {
 
   for (int8_t col = col_l; col <= col_h; col++) {
     for (int8_t row = row_l; row <= row_h; row++) {
@@ -98,10 +105,10 @@ void invert_rect(frame f, const int8_t row_l, const int8_t col_l,
   }
 }
 
-void draw_text_3_4(frame f, const bool symbols[][12], int8_t col_h,
-                   int8_t col_l, const int8_t row, const uint8_t msg[],
-                   const std::size_t msg_len, const uint8_t spacing,
-                   const int8_t step) {
+void Frame::draw_text_3_4(Frame f, const bool symbols[][12], int8_t col_h,
+                          int8_t col_l, const int8_t row, const uint8_t msg[],
+                          const std::size_t msg_len, const uint8_t spacing,
+                          const int8_t step) {
 
   col_l = (col_l < 0) ? 0 : col_l;
   col_h = (col_h > 11) ? 11 : col_h;

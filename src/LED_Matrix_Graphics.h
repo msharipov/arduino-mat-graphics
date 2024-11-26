@@ -1,51 +1,91 @@
+/*!
+ *  Created by Maxim Sharipov (msharipovr@gmail.com) 2024.
+ *
+ *  MIT license, all text above must be included in any redistribution
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy
+ *  of this software and associated documentation files (the "Software"), to
+ *  deal in the Software without restriction, including without limitation the
+ *  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+ *  sell copies of the Software, and to permit persons to whom the Software is
+ *  furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included in
+ *  all copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ *  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+ *  IN THE SOFTWARE.
+ */
+
 #ifndef MATRIX_PRINTING_H
 #define MATRIX_PRINTING_H
 
+#include <array>
 #include <cstddef>
 #include <stdint.h>
 
 namespace LMG {
 
-// Used by the Arduino LED Matrix library to store the state of the matrix.
-using frame = uint32_t[3];
+/// Stores the state of the LED matrix.
+class Frame {
+  std::array<uint32_t, 3> data = {0};
 
-// Sets the LED at ([row], [col]) to the value of bit.
-void set_bit(frame f, const int8_t row, const int8_t col, const bool bit);
+  uint32_t &operator[](size_t i);
 
-// Inverts the state of the LED at ([row], [col]).
-void invert_bit(frame f, const int8_t row, const int8_t col);
+public:
+  /// Constructs a frame with all lights off.
+  Frame() {}
 
-// Draws a [width]-by-[height] symbol to the LED matrix with its bottom
-// right corner at coordinates given by [row] and [column]. All LEDs
-// used by the symbol must lie within the matrix.
-void put_sym(frame f, const bool *symbols, const int8_t row, const int8_t col,
-             const int8_t width, const int8_t height);
+  /// Returns the frame data as an array of 32-bit integers.
+  /**
+   * The loadFrame function from the Arduino LED Matrix library takes an array
+   * of three 32-bit unsigned integers as input.
+   */
+  const uint32_t *getData();
 
-// Works like put_sym() but skips every position that is outside of the
-// rectangle given by vertices ([row_l], [col_l]) and ([row_h], [col_h]).
-void put_sym_bnd(frame f, const bool *symbols, const int8_t row,
-                 const int8_t col, const int8_t width, const int8_t height,
-                 const int8_t row_l, const int8_t col_l, const int8_t row_h,
-                 const int8_t col_h);
+  // Sets the LED at ([row], [col]) to the value of bit.
+  void set_bit(Frame f, const int8_t row, const int8_t col, const bool bit);
 
-// Sets all LEDs in a rectangle given by vertices ([row_l], [col_l]) and
-// ([row_h], [col_h]) to the value of [bit].
-void fill_rect(frame f, const int8_t row_l, const int8_t col_l,
-               const int8_t row_h, const int8_t col_h, const bool bit);
+  // Inverts the state of the LED at ([row], [col]).
+  void invert_bit(Frame f, const int8_t row, const int8_t col);
 
-// Inverts all LEDs in a rectangle given by vertices ([row_l], [col_l]) and
-// ([row_h], [col_h]).
-void invert_rect(frame f, const int8_t row_l, const int8_t col_l,
-                 const int8_t row_h, const int8_t col_h);
+  // Draws a [width]-by-[height] symbol to the LED matrix with its bottom
+  // right corner at coordinates given by [row] and [column]. All LEDs
+  // used by the symbol must lie within the matrix.
+  void put_sym(Frame f, const bool *symbols, const int8_t row, const int8_t col,
+               const int8_t width, const int8_t height);
 
-// Prints [msg] of length [msg_len] inside of a text box between [col_l] and
-// [col_h], with [row] being the lowest row and [spacing] being the amount
-// of empty space between each symbol. [step] shifts the text inside of the
-// text box to the right (step<0) and to the left (step>0).
-void draw_text_3_4(frame f, const bool symbols[][12], int8_t col_h,
-                   int8_t col_l, const int8_t row, const uint8_t msg[],
-                   const std::size_t msg_len, const uint8_t spacing,
-                   const int8_t step);
+  // Works like put_sym() but skips every position that is outside of the
+  // rectangle given by vertices ([row_l], [col_l]) and ([row_h], [col_h]).
+  void put_sym_bnd(Frame f, const bool *symbols, const int8_t row,
+                   const int8_t col, const int8_t width, const int8_t height,
+                   const int8_t row_l, const int8_t col_l, const int8_t row_h,
+                   const int8_t col_h);
+
+  // Sets all LEDs in a rectangle given by vertices ([row_l], [col_l]) and
+  // ([row_h], [col_h]) to the value of [bit].
+  void fill_rect(Frame f, const int8_t row_l, const int8_t col_l,
+                 const int8_t row_h, const int8_t col_h, const bool bit);
+
+  // Inverts all LEDs in a rectangle given by vertices ([row_l], [col_l]) and
+  // ([row_h], [col_h]).
+  void invert_rect(Frame f, const int8_t row_l, const int8_t col_l,
+                   const int8_t row_h, const int8_t col_h);
+
+  // Prints [msg] of length [msg_len] inside of a text box between [col_l] and
+  // [col_h], with [row] being the lowest row and [spacing] being the amount
+  // of empty space between each symbol. [step] shifts the text inside of the
+  // text box to the right (step<0) and to the left (step>0).
+  void draw_text_3_4(Frame f, const bool symbols[][12], int8_t col_h,
+                     int8_t col_l, const int8_t row, const uint8_t msg[],
+                     const std::size_t msg_len, const uint8_t spacing,
+                     const int8_t step);
+};
 
 // 3-by-5 digits
 /*
