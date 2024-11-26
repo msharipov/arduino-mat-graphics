@@ -43,8 +43,10 @@ public:
 
   /// Returns the frame data as an array of 32-bit integers.
   /**
-   * The loadFrame function from the Arduino LED Matrix library takes an array
-   * of three 32-bit unsigned integers as input.
+   * The `loadFrame` function from the Arduino LED Matrix library takes an array
+   * of three 32-bit unsigned integers as input. If we have an `ArduinoLEDMatrix matrix`
+   * and a `Frame f`, then `matrix.loadFrame(f.getData())` will update the LED matrix 
+   * with the current state of `f`.
    */
   const uint32_t *getData();
 
