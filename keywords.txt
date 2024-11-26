@@ -1,7 +1,19 @@
-LMG_set_bit	KEYWORD2
-LMG_put_sym	KEYWORD2
-LMG_put_sym_bnd	KEYWORD2
-LMG_fill_rect	KEYWORD2
-LMG_put_text_34	KEYWORD2
+##################################################
+# Datatypes
+##################################################
+frame	KEYWORD1
+
+##################################################
+# Functions
+##################################################
+set_bit	KEYWORD2
+put_sym	KEYWORD2
+put_sym_bnd	KEYWORD2
+fill_rect	KEYWORD2
+draw_text_34	KEYWORD2
+
+##################################################
+# Constants
+##################################################
 DIGITS_35	LITERAL1
-SYMBOLS_34	LITERAL1
+DEFAULT_FONT_3_4	LITERAL1
