@@ -3,7 +3,7 @@
 
 namespace LMG {
 
-void set_bit(uint32_t f[], const int8_t row, const int8_t col, const bool bit) {
+void set_bit(frame f, const int8_t row, const int8_t col, const bool bit) {
 
   uint8_t q, r, pos;
 
@@ -25,7 +25,7 @@ void set_bit(uint32_t f[], const int8_t row, const int8_t col, const bool bit) {
   }
 }
 
-void invert_bit(uint32_t f[], const int8_t row, const int8_t col) {
+void invert_bit(frame f, const int8_t row, const int8_t col) {
 
   uint8_t q, r, pos;
 
@@ -43,8 +43,8 @@ void invert_bit(uint32_t f[], const int8_t row, const int8_t col) {
   f[q] ^= (1UL << r);
 }
 
-void put_sym(uint32_t f[], const bool *symbol, const int8_t row,
-             const int8_t col, const int8_t width, const int8_t height) {
+void put_sym(frame f, const bool *symbol, const int8_t row, const int8_t col,
+             const int8_t width, const int8_t height) {
 
   for (int8_t add_col = 0; add_col < width; add_col++) {
     for (int8_t add_row = 0; add_row < height; add_row++) {
@@ -55,7 +55,7 @@ void put_sym(uint32_t f[], const bool *symbol, const int8_t row,
   }
 }
 
-void put_sym_bnd(uint32_t f[], const bool *symbol, const int8_t row,
+void put_sym_bnd(frame f, const bool *symbol, const int8_t row,
                  const int8_t col, const int8_t width, const int8_t height,
                  const int8_t row_l, const int8_t col_l, const int8_t row_h,
                  const int8_t col_h) {
@@ -78,7 +78,7 @@ void put_sym_bnd(uint32_t f[], const bool *symbol, const int8_t row,
   }
 }
 
-void fill_rect(uint32_t f[], const int8_t row_l, const int8_t col_l,
+void fill_rect(frame f, const int8_t row_l, const int8_t col_l,
                const int8_t row_h, const int8_t col_h, const bool bit) {
 
   for (int8_t col = col_l; col <= col_h; col++) {
@@ -88,7 +88,7 @@ void fill_rect(uint32_t f[], const int8_t row_l, const int8_t col_l,
   }
 }
 
-void invert_rect(uint32_t f[], const int8_t row_l, const int8_t col_l,
+void invert_rect(frame f, const int8_t row_l, const int8_t col_l,
                  const int8_t row_h, const int8_t col_h) {
 
   for (int8_t col = col_l; col <= col_h; col++) {
@@ -98,7 +98,7 @@ void invert_rect(uint32_t f[], const int8_t row_l, const int8_t col_l,
   }
 }
 
-void draw_text_3_4(uint32_t f[], const bool symbols[][12], int8_t col_h,
+void draw_text_3_4(frame f, const bool symbols[][12], int8_t col_h,
                    int8_t col_l, const int8_t row, const uint8_t msg[],
                    const std::size_t msg_len, const uint8_t spacing,
                    const int8_t step) {
