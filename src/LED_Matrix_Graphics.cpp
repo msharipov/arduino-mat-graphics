@@ -1,6 +1,4 @@
 #include "LED_Matrix_Graphics.h"
-#include <cstdint>
-#include <stdint.h>
 
 namespace LMG {
 

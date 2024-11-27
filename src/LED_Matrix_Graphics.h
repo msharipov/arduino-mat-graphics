@@ -27,7 +27,7 @@
 
 #include <array>
 #include <cstddef>
-#include <stdint.h>
+#include <cstdint>
 
 namespace LMG {
 
