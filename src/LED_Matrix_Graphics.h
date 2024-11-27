@@ -32,6 +32,26 @@
 namespace LMG {
 
 /// Stores the state of the LED matrix.
+/**
+ * Whenever this library refers to the rows and columns of the LED matrix, both
+ * are indexed from 0. The LED that is closest to the center of the board is
+ * located at (0,0). The columns range from 0 to 11 and the rows range from 0
+ * to 7, inclusively.
+ *
+ *       ╔═══════════════════════════╗
+ *       ║[o] ○ ◘◘◘◘◘◘◘◘◘◘  ◘◘◘◘◘◘◘◘ ║
+ *       ║                           ║
+ *  usb ▒▒▒▒    •••           ≡███≡  ╚╗
+ *      ▒▒▒▒    •••           ≡███≡  ○║
+ *       ║             col          ••║
+ *       ║  ▒▒▒▒▒     0→ ፡፡፡፡፡፡፡፡፡፡ ••║
+ *       ║  ▒▒▒▒▒ row ↓፡፡፡፡፡፡፡፡፡፡፡፡ ••║
+ *       ║  ▒▒▒▒▒     ፡፡፡፡፡፡፡፡፡፡፡፡፡   ║
+ *   DC █████         ፡፡፡፡፡፡፡፡፡፡፡፡፡   ║
+ * jack █████                        ○║
+ *       ║    ○ •••  ◘◘◘◘◘◘◘◘ ◘◘◘◘◘◘ ╔╝
+ *       ╚═══════════════════════════╝
+ */
 class Frame {
   std::array<uint32_t, 3> data = {0};
 
