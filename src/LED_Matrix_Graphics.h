@@ -53,7 +53,7 @@ namespace LMG {
  *       ╚══════════════════════════╝
  */
 class Frame {
-  std::array<uint32_t, 3> data = {0};
+  std::array<uint32_t, 3> data{0, 0, 0};
 
 public:
   /// Constructs a frame with all lights off.
