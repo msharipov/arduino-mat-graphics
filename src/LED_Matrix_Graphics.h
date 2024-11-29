@@ -83,14 +83,44 @@ public:
    * @param col The column in which the LED is located.
    * @param bit Whether the LED should be on.
    */
-  void inline setLED(const uint8_t row, const uint8_t col, const bool bit);
+  void inline setLED(const uint8_t row, const uint8_t col, const bool bit) {
+
+    constexpr uint32_t TOP_BIT = 1L << 31;
+    const uint8_t pos = row * LED_MATRIX_WIDTH + col;
+
+    // Each part of the data array has 32 bits, so we divide by 2^5 to
+    // determine which part of the array to update.
+    const uint8_t data_index = pos >> 5;
+
+    // The remainder determines which bit should be updated.
+    const uint8_t rem = pos % 32;
+
+    if (bit) {
+      data[data_index] |= (TOP_BIT >> rem);
+    } else {
+      data[data_index] &= ~(TOP_BIT >> rem);
+    }
+  }
 
   /// Inverts the state of a single LED.
   /**
    * @param row The row in which the LED is located.
    * @param col The column in which the LED is located.
    */
-  void invertLED(const uint8_t row, const uint8_t col);
+  void inline invertLED(const uint8_t row, const uint8_t col) {
+
+    constexpr uint32_t TOP_BIT = 1L << 31;
+    const uint8_t pos = row * LED_MATRIX_WIDTH + col;
+
+    // Each part of the data array has 32 bits, so we divide by 2^5 to
+    // determine which part of the array to update.
+    const uint8_t data_index = pos >> 5;
+
+    // The remainder determines which bit should be updated.
+    const uint8_t rem = pos % 32;
+
+    data[data_index] ^= (TOP_BIT >> rem);
+  }
 
   // Draws a [width]-by-[height] symbol to the LED matrix with its bottom
   // right corner at coordinates given by [row] and [column]. All LEDs
