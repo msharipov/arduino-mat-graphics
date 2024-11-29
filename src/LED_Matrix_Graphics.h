@@ -29,9 +29,6 @@
 #include <cstddef>
 #include <cstdint>
 
-namespace LMG {
-
-/// Stores the state of the LED matrix.
 /**
  * Whenever this library refers to the rows and columns of the LED matrix, both
  * are indexed from 0. The LED that is closest to the center of the board is
@@ -52,6 +49,15 @@ namespace LMG {
  *       ║    ○ ••• ◘◘◘◘◘◘◘◘ ◘◘◘◘◘◘ ╔╝
  *       ╚══════════════════════════╝
  */
+namespace LMG {
+
+/// Number of rows in the LED matrix.
+constexpr uint8_t LED_MATRIX_HEIGHT{8};
+
+/// Number of columns in the LED matrix.
+constexpr uint8_t LED_MATRIX_WIDTH{12};
+
+/// Stores the state of the LED matrix.
 class Frame {
   std::array<uint32_t, 3> data{0, 0, 0};
 
