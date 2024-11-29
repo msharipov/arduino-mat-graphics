@@ -4,7 +4,7 @@ namespace LMG {
 
 const uint32_t *Frame::getData() { return data.data(); }
 
-void Frame::set_bit(const int8_t row, const int8_t col, const bool bit) {
+void Frame::setLED(const uint8_t row, const uint8_t col, const bool bit) {
 
   uint8_t q, r, pos;
 
@@ -50,8 +50,8 @@ void Frame::put_sym(const bool *symbol, const int8_t row, const int8_t col,
   for (int8_t add_col = 0; add_col < width; add_col++) {
     for (int8_t add_row = 0; add_row < height; add_row++) {
 
-      set_bit(row + add_row, col + add_col,
-              *(symbol + sizeof(bool) * (add_col + add_row * width)));
+      setLED(row + add_row, col + add_col,
+             *(symbol + sizeof(bool) * (add_col + add_row * width)));
     }
   }
 }
@@ -73,8 +73,8 @@ void Frame::put_sym_bnd(const bool *symbol, const int8_t row, const int8_t col,
         continue;
       }
 
-      set_bit(row + add_row, col + add_col,
-              *(symbol + sizeof(bool) * (add_col + add_row * width)));
+      setLED(row + add_row, col + add_col,
+             *(symbol + sizeof(bool) * (add_col + add_row * width)));
     }
   }
 }
@@ -84,7 +84,7 @@ void Frame::fill_rect(const int8_t row_l, const int8_t col_l,
 
   for (int8_t col = col_l; col <= col_h; col++) {
     for (int8_t row = row_l; row <= row_h; row++) {
-      set_bit(row, col, bit);
+      setLED(row, col, bit);
     }
   }
 }
