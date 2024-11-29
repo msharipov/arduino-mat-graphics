@@ -6,23 +6,22 @@ const uint32_t *Frame::getData() { return data.data(); }
 
 void Frame::setLED(const uint8_t row, const uint8_t col, const bool bit) {
 
-  uint8_t q, r, pos;
+  uint8_t data_index{};
+  uint8_t rem{};
+  const uint8_t pos = row * LED_MATRIX_WIDTH + col;
 
-  pos = row * 12 + col;
+  // Each part of the data array has 32 bits, so we divide by 2^5 to
+  // determine which part of the array to update.
+  data_index = pos >> 5;
 
-  if (pos < 32) {
-    q = 2;
-  } else if (pos < 64) {
-    q = 1;
-  } else {
-    q = 0;
-  }
-  r = pos % 32;
+  // The remainder determines which bit should be updated.
+  rem = pos % 32;
 
+  constexpr uint32_t top_bit = 1L << 31;
   if (bit) {
-    data[q] |= (1UL << r);
+    data[data_index] |= (top_bit >> rem);
   } else {
-    data[q] &= ~(1UL << r);
+    data[data_index] &= ~(top_bit >> rem);
   }
 }
 
