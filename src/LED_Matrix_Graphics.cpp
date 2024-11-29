@@ -4,24 +4,23 @@ namespace LMG {
 
 const uint32_t *Frame::getData() { return data.data(); }
 
-void Frame::setLED(const uint8_t row, const uint8_t col, const bool bit) {
+void inline Frame::setLED(const uint8_t row, const uint8_t col,
+                          const bool bit) {
 
-  uint8_t data_index{};
-  uint8_t rem{};
+  constexpr uint32_t TOP_BIT = 1L << 31;
   const uint8_t pos = row * LED_MATRIX_WIDTH + col;
 
   // Each part of the data array has 32 bits, so we divide by 2^5 to
   // determine which part of the array to update.
-  data_index = pos >> 5;
+  const uint8_t data_index = pos >> 5;
 
   // The remainder determines which bit should be updated.
-  rem = pos % 32;
+  const uint8_t rem = pos % 32;
 
-  constexpr uint32_t top_bit = 1L << 31;
   if (bit) {
-    data[data_index] |= (top_bit >> rem);
+    data[data_index] |= (TOP_BIT >> rem);
   } else {
-    data[data_index] &= ~(top_bit >> rem);
+    data[data_index] &= ~(TOP_BIT >> rem);
   }
 }
 

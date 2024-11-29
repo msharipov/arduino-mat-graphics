@@ -83,7 +83,7 @@ public:
    * @param col The column in which the LED is located.
    * @param bit Whether the LED should be on.
    */
-  void setLED(const uint8_t row, const uint8_t col, const bool bit);
+  void inline setLED(const uint8_t row, const uint8_t col, const bool bit);
 
   // Inverts the state of the LED at ([row], [col]).
   void invert_bit(const int8_t row, const int8_t col);
