@@ -35,17 +35,9 @@ void setup() {
 }
 
 void loop() {
-  for (size_t row = 0; row < LMG::LED_MATRIX_HEIGHT; row++) {
-    for (size_t col = 0; col < LMG::LED_MATRIX_WIDTH; col++) {
-      frame.setLED(row, col, true);
-      matrix.loadFrame(frame.getData());
-      delay(20);
-    }
-  }
-
-  for (size_t row = 0; row < LMG::LED_MATRIX_HEIGHT; row++) {
-    for (size_t col = 0; col < LMG::LED_MATRIX_WIDTH; col++) {
-      frame.setLED(row, col, false);
+  for (uint8_t row = 0; row < LMG::LED_MATRIX_HEIGHT; row++) {
+    for (uint8_t col = 0; col < LMG::LED_MATRIX_WIDTH; col++) {
+      frame.invertLED(row, col);
       matrix.loadFrame(frame.getData());
       delay(20);
     }
