@@ -85,8 +85,12 @@ public:
    */
   void inline setLED(const uint8_t row, const uint8_t col, const bool bit);
 
-  // Inverts the state of the LED at ([row], [col]).
-  void invert_bit(const int8_t row, const int8_t col);
+  /// Inverts the state of a single LED.
+  /**
+   * @param row The row in which the LED is located.
+   * @param col The column in which the LED is located.
+   */
+  void invertLED(const uint8_t row, const uint8_t col);
 
   // Draws a [width]-by-[height] symbol to the LED matrix with its bottom
   // right corner at coordinates given by [row] and [column]. All LEDs

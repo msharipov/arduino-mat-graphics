@@ -24,22 +24,19 @@ void inline Frame::setLED(const uint8_t row, const uint8_t col,
   }
 }
 
-void Frame::invert_bit(const int8_t row, const int8_t col) {
+void Frame::invertLED(const uint8_t row, const uint8_t col) {
 
-  uint8_t q, r, pos;
+  constexpr uint32_t TOP_BIT = 1L << 31;
+  const uint8_t pos = row * LED_MATRIX_WIDTH + col;
 
-  pos = row * 12 + col;
+  // Each part of the data array has 32 bits, so we divide by 2^5 to
+  // determine which part of the array to update.
+  const uint8_t data_index = pos >> 5;
 
-  if (pos < 32) {
-    q = 2;
-  } else if (pos < 64) {
-    q = 1;
-  } else {
-    q = 0;
-  }
-  r = pos % 32;
+  // The remainder determines which bit should be updated.
+  const uint8_t rem = pos % 32;
 
-  data[q] ^= (1UL << r);
+  data[data_index] ^= (TOP_BIT >> rem);
 }
 
 void Frame::put_sym(const bool *symbol, const int8_t row, const int8_t col,
@@ -90,9 +87,9 @@ void Frame::fill_rect(const int8_t row_l, const int8_t col_l,
 void Frame::invert_rect(const int8_t row_l, const int8_t col_l,
                         const int8_t row_h, const int8_t col_h) {
 
-  for (int8_t col = col_l; col <= col_h; col++) {
-    for (int8_t row = row_l; row <= row_h; row++) {
-      invert_bit(row, col);
+  for (uint8_t col = col_l; col <= col_h; col++) {
+    for (uint8_t row = row_l; row <= row_h; row++) {
+      invertLED(row, col);
     }
   }
 }
