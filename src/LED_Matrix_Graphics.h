@@ -67,7 +67,7 @@ public:
    * `matrix.loadFrame(f.getData())` will update the LED matrix with the current
    * state of `f`.
    *
-   * \returns A pointer to the data array.
+   * @returns A raw pointer to the data array.
    */
   const uint32_t *getData();
 
