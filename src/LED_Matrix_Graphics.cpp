@@ -60,12 +60,12 @@ void Frame::invertRect(const Rect &area) {
   }
 }
 
-void Frame::put_sym(const bool *symbol, const int8_t row, const int8_t col,
-                    const int8_t width, const int8_t height) {
+void Frame::drawSprite(const bool *data, const uint8_t row, const uint8_t col,
+                       const uint8_t width, const uint8_t height) {
   for (int8_t add_col = 0; add_col < width; add_col++) {
     for (int8_t add_row = 0; add_row < height; add_row++) {
       setLED(row + add_row, col + add_col,
-             *(symbol + sizeof(bool) * (add_col + add_row * width)));
+             *(data + sizeof(bool) * (add_col + add_row * width)));
     }
   }
 }

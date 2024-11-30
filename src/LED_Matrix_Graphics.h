@@ -165,11 +165,27 @@ public:
    */
   void invertRect(const Rect &area);
 
-  // Draws a [width]-by-[height] symbol to the LED matrix with its bottom
-  // right corner at coordinates given by [row] and [column]. All LEDs
-  // used by the symbol must lie within the matrix.
-  void put_sym(const bool *symbols, const int8_t row, const int8_t col,
-               const int8_t width, const int8_t height);
+  /// Draws a sprite to the LED matrix.
+  /**
+   * @param sprite  Pointer to the sprite data.
+   * @param row,col Position of the top left corner of the sprite.
+   * @param width   Width of the sprite.
+   * @param height  Height of the sprite.
+   *
+   * The sprite must be laid out sequentially in memory row-by-row. For
+   * example, given a sprite with 3 rows and 4 columns, if our sprite array
+   * looks like this:
+   *
+   *  `bool s[3*4] = {true, false, false, ... , true};`
+   *
+   *  then the sprite would be drawn as:
+   *
+   *  `s[0]  s[1]  s[2]  s[3]`
+   *  `s[4]  s[5]  s[6]  s[7]`
+   *  `s[8]  s[5] s[10] s[11]`
+   */
+  void drawSprite(const bool *sprite, const uint8_t row, const uint8_t col,
+                  const uint8_t width, const uint8_t height);
 
   // Works like put_sym() but skips every position that is outside of the
   // rectangle given by vertices ([row_l], [col_l]) and ([row_h], [col_h]).
@@ -230,4 +246,4 @@ extern const bool DIGITS_35[10][15];
  |   # | ### | ### |  #  | ### | ### |
 */
 extern const bool DEFAULT_FONT_3_4[36][12];
-}  // namespace LMG
+} // namespace LMG
