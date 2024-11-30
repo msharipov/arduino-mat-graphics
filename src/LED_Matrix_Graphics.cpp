@@ -28,6 +28,15 @@ void Frame::fillRect(const Rect &area, const bool bit) {
   }
 }
 
+void Frame::invertRect(const Rect &area) {
+
+  for (int8_t col = area.low_col; col <= area.high_col; col++) {
+    for (int8_t row = area.low_row; row <= area.high_row; row++) {
+      invertLED(row, col);
+    }
+  }
+}
+
 void Frame::put_sym(const bool *symbol, const int8_t row, const int8_t col,
                     const int8_t width, const int8_t height) {
 
@@ -59,16 +68,6 @@ void Frame::put_sym_bnd(const bool *symbol, const int8_t row, const int8_t col,
 
       setLED(row + add_row, col + add_col,
              *(symbol + sizeof(bool) * (add_col + add_row * width)));
-    }
-  }
-}
-
-void Frame::invert_rect(const int8_t row_l, const int8_t col_l,
-                        const int8_t row_h, const int8_t col_h) {
-
-  for (uint8_t col = col_l; col <= col_h; col++) {
-    for (uint8_t row = row_l; row <= row_h; row++) {
-      invertLED(row, col);
     }
   }
 }

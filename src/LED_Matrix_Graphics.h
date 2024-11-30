@@ -161,8 +161,7 @@ public:
 
   // Inverts all LEDs in a rectangle given by vertices ([row_l], [col_l]) and
   // ([row_h], [col_h]).
-  void invert_rect(const int8_t row_l, const int8_t col_l, const int8_t row_h,
-                   const int8_t col_h);
+  void invertRect(const Rect &area);
 
   // Draws a [width]-by-[height] symbol to the LED matrix with its bottom
   // right corner at coordinates given by [row] and [column]. All LEDs
