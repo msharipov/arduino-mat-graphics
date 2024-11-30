@@ -35,6 +35,8 @@ constexpr std::array<uint32_t, 3> SET_LED_SAMPLES{1000, 10000, 100000};
 constexpr uint32_t SET_LED_RUNS{10};
 constexpr std::array<uint32_t, 3> INVERT_LED_SAMPLES{1000, 10000, 100000};
 constexpr uint32_t INVERT_LED_RUNS{10};
+constexpr std::array<uint32_t, 3> FILL_RECT_SAMPLES{100, 1000, 10000};
+constexpr uint32_t FILL_RECT_RUNS{10};
 
 /// Prints the results of a benchmark.
 /**
@@ -166,10 +168,51 @@ void runBenchmarksInvertLED() {
   }
 }
 
+/// Runs a single benchmark for Frame::fillRect.
+const std::tuple<double, double> timeFillRect(const uint32_t iterations) {
+  std::array<double, FILL_RECT_RUNS> times {};
+  const LMG::Rect area{1, 6, 1, 8};
+  for (uint32_t run = 0; run < FILL_RECT_RUNS; run++) {
+    const uint32_t start_time = micros();
+    volatile bool consumer{0};
+
+    // Time how long it takes to generate the random bits
+    for (uint32_t count = 0; count < iterations; count++) {
+      consumer = static_cast<bool>(rand() % 2);
+    }
+    const uint32_t generation_time = micros() - start_time;
+
+    for (uint32_t count = 0; count < iterations; count++) {
+      frame.fillRect(area, static_cast<bool>(rand() % 2));
+    }
+    const uint32_t final_time = micros();
+
+    // Time in microseconds
+    const double total = static_cast<double>(
+      final_time - 2 * generation_time - start_time);
+
+    // Time per iteration in microseconds
+    const double per_iter = total / static_cast<double>(iterations);
+    times[run] = per_iter;
+  }
+
+  return getStats(times);
+}
+
+/// Runs all benchmarks for Frame::fillRect and prints the results over serial.
+void runBenchmarksFillRect() {
+  Serial.print("Running benchmarks for Frame::fillRect!\n");
+  for (auto sample_size : FILL_RECT_SAMPLES) {
+    const std::tuple<double, double> result = timeFillRect(sample_size);
+    printResults(result, sample_size, FILL_RECT_RUNS);
+  }
+}
+
 void setup() {
   Serial.begin(9600);
   runBenchmarksSetLED();
   runBenchmarksInvertLED();
+  runBenchmarksFillRect();
 }
 
 void loop() {}
