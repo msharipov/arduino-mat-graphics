@@ -42,6 +42,20 @@ Rect::Rect(uint8_t row_a, uint8_t row_b, uint8_t col_a, uint8_t col_b)
   }
 }
 
+std::optional<Rect> Rect::operator&(const Rect &other) {
+  const bool disjoint_vertically =
+      low_row > other.high_row || other.low_row > high_row;
+  const bool disjoint_horizontally =
+      low_col > other.high_col || other.low_col > high_col;
+  if (disjoint_vertically || disjoint_horizontally) {
+    return std::nullopt;
+  }
+
+  return Rect{
+      std::max(low_row, other.low_row), std::min(high_row, other.high_row),
+      std::max(low_col, other.low_col), std::min(high_col, other.high_col)};
+}
+
 const uint32_t *Frame::getData() { return data.data(); }
 
 void Frame::fillRect(const Rect &area, const bool bit) {

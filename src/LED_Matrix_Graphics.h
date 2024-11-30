@@ -27,6 +27,7 @@
 #include <array>
 #include <cstddef>
 #include <cstdint>
+#include <optional>
 
 /**
  * Whenever this library refers to the rows and columns of the LED matrix, both
@@ -79,6 +80,15 @@ public:
    * points for which 2 <= row <= 5 and 3 <= column <= 7.
    */
   Rect(uint8_t row_a, uint8_t row_b, uint8_t col_a, uint8_t col_b);
+
+  /// Returns the intersection of two rectangles.
+  /**
+   * @param other The other rectangle.
+   * @returns A rectangle that corresponds to the intersection of the two
+   *          operands, if it exists. If the rectangles do not intersect,
+   *          returns std::nullopt.
+   */
+  std::optional<Rect> operator&(const Rect &other);
 };
 
 /// Stores the state of the LED matrix.
