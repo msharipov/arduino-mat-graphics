@@ -57,6 +57,31 @@ constexpr uint8_t LED_MATRIX_HEIGHT{8};
 /// Number of columns in the LED matrix.
 constexpr uint8_t LED_MATRIX_WIDTH{12};
 
+/// Represents a rectangular subregion of the LED matrix.
+class Rect {
+  friend class Frame;
+  uint8_t low_row;
+  uint8_t high_row;
+  uint8_t low_col;
+  uint8_t high_col;
+
+  /// Default constructor is private to prevent invalid rectangles
+  Rect() {}
+
+public:
+  /// Creates a rectangle that is bounded by two rows and two columns.
+  /**
+   * @param row_a,row_b   Rows that contain horizontal boundaries of the
+   *                      rectangle.
+   * @param col_a,col_b   Columns that contain vertical boundaries of the
+   *                      rectangle.
+   *
+   * The ranges are inclusive. For example, `Rect(5, 2, 3, 7)` contains all
+   * points for which 2 <= row <= 5 and 3 <= column <= 7.
+   */
+  Rect(uint8_t row_a, uint8_t row_b, uint8_t col_a, uint8_t col_b);
+};
+
 /// Stores the state of the LED matrix.
 class Frame {
   std::array<uint32_t, 3> data{0, 0, 0};
@@ -110,6 +135,8 @@ public:
   /**
    * @param row The row in which the LED is located.
    * @param col The column in which the LED is located.
+   *
+   * If the LED position is out of bounds, this function does nothing.
    */
   void inline invertLED(const uint8_t row, const uint8_t col) {
 

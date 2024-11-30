@@ -2,6 +2,22 @@
 
 namespace LMG {
 
+Rect::Rect(uint8_t row_a, uint8_t row_b, uint8_t col_a, uint8_t col_b)
+    : low_row(row_a), high_row(row_a), low_col(col_a), high_col(col_a) {
+
+  if (row_b > row_a) {
+    high_row = row_b;
+  } else {
+    low_row = row_b;
+  }
+
+  if (col_b > col_a) {
+    high_row = row_b;
+  } else {
+    low_row = row_b;
+  }
+}
+
 const uint32_t *Frame::getData() { return data.data(); }
 
 void Frame::put_sym(const bool *symbol, const int8_t row, const int8_t col,
