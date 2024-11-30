@@ -155,8 +155,11 @@ public:
     }
   }
 
-  // Sets all LEDs in a rectangle given by vertices ([row_l], [col_l]) and
-  // ([row_h], [col_h]) to the value of [bit].
+  /// Sets the state of all LEDs within a rectangle.
+  /**
+   * @param area The rectangle of LEDs that will be modified.
+   * @param bit  Determines whether the LEDs are switched on or off.
+   */
   void fillRect(const Rect &area, const bool bit);
 
   // Inverts all LEDs in a rectangle given by vertices ([row_l], [col_l]) and
