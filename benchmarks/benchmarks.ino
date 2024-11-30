@@ -31,8 +31,10 @@ constexpr uint8_t TOTAL_LED_COUNT {
   LMG::LED_MATRIX_HEIGHT * LMG::LED_MATRIX_WIDTH
 };
 
-constexpr std::array<uint32_t, 3> SET_LED_SAMPLES {1000, 10000, 100000};
-constexpr uint32_t SET_LED_RUNS = 10;
+constexpr std::array<uint32_t, 3> SET_LED_SAMPLES{1000, 10000, 100000};
+constexpr uint32_t SET_LED_RUNS{10};
+constexpr std::array<uint32_t, 3> INVERT_LED_SAMPLES{1000, 10000, 100000};
+constexpr uint32_t INVERT_LED_RUNS{10};
 
 /// Prints the results of a benchmark.
 /**
@@ -70,7 +72,7 @@ const std::tuple<double, double> getStats(const std::array<double, N> &arr) {
   return std::make_tuple(mean, stdev);
 }
 
-/// Runs a single benchmark for Frame::setLED call.
+/// Runs a single benchmark for Frame::setLED.
 const std::tuple<double, double> timeSetLED(const uint32_t iterations) {
   std::array<double, SET_LED_RUNS> times {};
   for (uint32_t run = 0; run < SET_LED_RUNS; run++) {
@@ -118,9 +120,56 @@ void runBenchmarksSetLED() {
   }
 }
 
+/// Runs a single benchmark for Frame::invertLED.
+const std::tuple<double, double> timeInvertLED(const uint32_t iterations) {
+  std::array<double, INVERT_LED_RUNS> times {};
+  for (uint32_t run = 0; run < INVERT_LED_RUNS; run++) {
+    const uint32_t start_time = micros();
+
+    // Time how long it takes to generate the row-col combinations
+    volatile uint8_t pos {};
+    volatile uint8_t row {};
+    volatile uint8_t col {};
+    for (uint32_t count = 0; count < iterations; count++) {
+      pos = count % TOTAL_LED_COUNT;
+      row = pos % LMG::LED_MATRIX_HEIGHT;
+      col = pos / LMG::LED_MATRIX_WIDTH;
+    }
+    const uint32_t generation_time = micros() - start_time;
+
+    for (uint32_t count = 0; count < iterations; count++) {
+      pos = count % TOTAL_LED_COUNT;
+      row = pos % LMG::LED_MATRIX_HEIGHT;
+      col = pos / LMG::LED_MATRIX_WIDTH;
+      frame.invertLED(row, col);
+    }
+    const uint32_t final_time = micros();
+
+    // Time in microseconds
+    const double total = static_cast<double>(
+      final_time - 2 * generation_time - start_time);
+
+    // Time per iteration in microseconds
+    const double per_iter = total / static_cast<double>(iterations);
+    times[run] = per_iter;
+  }
+
+  return getStats(times);
+}
+
+/// Runs all benchmarks for Frame::invertLED and prints the results over serial.
+void runBenchmarksInvertLED() {
+  Serial.print("Running benchmarks for Frame::invertLED!\n");
+  for (auto sample_size : INVERT_LED_SAMPLES) {
+    const std::tuple<double, double> result = timeInvertLED(sample_size);
+    printResults(result, sample_size, INVERT_LED_RUNS);
+  }
+}
+
 void setup() {
   Serial.begin(9600);
   runBenchmarksSetLED();
+  runBenchmarksInvertLED();
 }
 
 void loop() {}
