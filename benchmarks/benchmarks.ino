@@ -37,6 +37,8 @@ constexpr std::array<uint32_t, 3> INVERT_LED_SAMPLES{1000, 10000, 100000};
 constexpr uint32_t INVERT_LED_RUNS{10};
 constexpr std::array<uint32_t, 3> FILL_RECT_SAMPLES{100, 1000, 10000};
 constexpr uint32_t FILL_RECT_RUNS{10};
+constexpr std::array<uint32_t, 3> INVERT_RECT_SAMPLES{100, 1000, 10000};
+constexpr uint32_t INVERT_RECT_RUNS{10};
 
 /// Prints the results of a benchmark.
 /**
@@ -208,11 +210,45 @@ void runBenchmarksFillRect() {
   }
 }
 
+/// Runs a single benchmark for Frame::invertRect.
+const std::tuple<double, double> timeInvertRect(const uint32_t iterations) {
+  std::array<double, INVERT_RECT_RUNS> times {};
+  const LMG::Rect area{1, 6, 1, 8};
+  for (uint32_t run = 0; run < INVERT_RECT_RUNS; run++) {
+    const uint32_t start_time = micros();
+    for (uint32_t count = 0; count < iterations; count++) {
+      frame.invertRect(area);
+    }
+    const uint32_t final_time = micros();
+
+    // Time in microseconds
+    const double total = static_cast<double>(
+      final_time - start_time);
+
+    // Time per iteration in microseconds
+    const double per_iter = total / static_cast<double>(iterations);
+    times[run] = per_iter;
+  }
+
+  return getStats(times);
+}
+
+/// Runs all benchmarks for Frame::invertRect and prints the results over
+/// serial.
+void runBenchmarksInvertRect() {
+  Serial.print("Running benchmarks for Frame::invertRect!\n");
+  for (auto sample_size : INVERT_RECT_SAMPLES) {
+    const std::tuple<double, double> result = timeInvertRect(sample_size);
+    printResults(result, sample_size, INVERT_RECT_RUNS);
+  }
+}
+
 void setup() {
   Serial.begin(9600);
   runBenchmarksSetLED();
   runBenchmarksInvertLED();
   runBenchmarksFillRect();
+  runBenchmarksInvertRect();
 }
 
 void loop() {}
