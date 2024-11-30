@@ -20,6 +20,14 @@ Rect::Rect(uint8_t row_a, uint8_t row_b, uint8_t col_a, uint8_t col_b)
 
 const uint32_t *Frame::getData() { return data.data(); }
 
+void Frame::fillRect(const Rect &area, const bool bit) {
+  for (int8_t col = area.low_col; col <= area.high_col; col++) {
+    for (int8_t row = area.low_row; row <= area.high_row; row++) {
+      setLED(row, col, bit);
+    }
+  }
+}
+
 void Frame::put_sym(const bool *symbol, const int8_t row, const int8_t col,
                     const int8_t width, const int8_t height) {
 
@@ -55,14 +63,6 @@ void Frame::put_sym_bnd(const bool *symbol, const int8_t row, const int8_t col,
   }
 }
 
-void Frame::fillRect(const Rect &area, const bool bit) {
-  for (int8_t col = area.low_col; col <= area.high_col; col++) {
-    for (int8_t row = area.low_row; row <= area.high_row; row++) {
-      setLED(row, col, bit);
-    }
-  }
-}
-
 void Frame::invert_rect(const int8_t row_l, const int8_t col_l,
                         const int8_t row_h, const int8_t col_h) {
 
@@ -87,13 +87,13 @@ void Frame::draw_text_3_4(const bool symbols[][12], int8_t col_h, int8_t col_l,
   // Skip the printing if the text is completely out of bounds.
   // Warning: Removing the type cast causes incorrect integer promotion!
   if (step >= (int16_t)(msg_len * block_width - spacing)) {
-    fill_rect(row, col_l, row + 3, col_h, 0);
+    fillRect(Rect(row, col_l, row + 3, col_h), 0);
     return;
   }
 
   // Left-side spacing
   if (step < 0) {
-    fill_rect(row, col + 3, row + 3, col_h, 0);
+    fillRect(Rect(row, col + 3, row + 3, col_h), 0);
   }
 
   for (int8_t sym = 0; sym < msg_len; sym++) {
@@ -109,7 +109,7 @@ void Frame::draw_text_3_4(const bool symbols[][12], int8_t col_h, int8_t col_l,
 
     // Tail spacing before first symbol
     if (spacing != 0 && col_h - col >= 2 && col_h - col < block_width) {
-      fill_rect(row, col + 3, row + 3, col_h, 0);
+      fillRect(Rect(row, col + 3, row + 3, col_h), 0);
     }
 
     put_sym_bnd(symbols[msg[sym]], row, col, 3, 4, row, col_l, row + 3, col_h);
@@ -122,7 +122,7 @@ void Frame::draw_text_3_4(const bool symbols[][12], int8_t col_h, int8_t col_l,
         spc_end = col_l;
       }
 
-      fill_rect(row, spc_end, row + 3, col - 1, 0);
+      fillRect(Rect(row, spc_end, row + 3, col - 1), 0);
     }
 
     col -= block_width;
@@ -130,7 +130,7 @@ void Frame::draw_text_3_4(const bool symbols[][12], int8_t col_h, int8_t col_l,
 
   // Right-side space
   if (col > col_l) {
-    fill_rect(row, col_l, row + 3, col - 1, 0);
+    fillRect(Rect(row, col_l, row + 3, col - 1), 0);
   }
 }
 
