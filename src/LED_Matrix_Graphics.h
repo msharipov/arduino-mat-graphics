@@ -159,8 +159,10 @@ public:
    */
   void fillRect(const Rect &area, const bool bit);
 
-  // Inverts all LEDs in a rectangle given by vertices ([row_l], [col_l]) and
-  // ([row_h], [col_h]).
+  /// Inverts the state of all LEDs within a rectangle.
+  /**
+   * @param area The rectangle of LEDs that will be flipped.
+   */
   void invertRect(const Rect &area);
 
   // Draws a [width]-by-[height] symbol to the LED matrix with its bottom
