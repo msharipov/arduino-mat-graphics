@@ -88,38 +88,21 @@ public:
   void inline setLED(const uint8_t row, const uint8_t col, const bool bit) {
 
     if (row < LED_MATRIX_HEIGHT && col < LED_MATRIX_WIDTH) {
-      setLED_fast(row, col, bit);
-    }
-  }
+      constexpr uint32_t TOP_BIT = 1L << 31;
+      const uint8_t pos = row * LED_MATRIX_WIDTH + col;
 
-  /// Sets the state of a single LED without checking bounds.
-  /**
-   * @param row The row in which the LED is located.
-   * @param col The column in which the LED is located.
-   * @param bit Whether the LED should be on.
-   *
-   * CAUTION! This function does not check whether the values of row and col
-   * are out of bounds. Calling this function with incorrect arguments is
-   * undefined behavior. Use setLED instead if you need the function to accept
-   * potentially invalid LED positions.
-   */
-  void inline setLED_fast(const uint8_t row, const uint8_t col,
-                          const bool bit) {
+      // Each part of the data array has 32 bits, so we divide by 2^5 to
+      // determine which part of the array to update.
+      const uint8_t data_index = pos >> 5;
 
-    constexpr uint32_t TOP_BIT = 1L << 31;
-    const uint8_t pos = row * LED_MATRIX_WIDTH + col;
+      // The remainder determines which bit should be updated.
+      const uint8_t rem = pos % 32;
 
-    // Each part of the data array has 32 bits, so we divide by 2^5 to
-    // determine which part of the array to update.
-    const uint8_t data_index = pos >> 5;
-
-    // The remainder determines which bit should be updated.
-    const uint8_t rem = pos % 32;
-
-    if (bit) {
-      data[data_index] |= (TOP_BIT >> rem);
-    } else {
-      data[data_index] &= ~(TOP_BIT >> rem);
+      if (bit) {
+        data[data_index] |= (TOP_BIT >> rem);
+      } else {
+        data[data_index] &= ~(TOP_BIT >> rem);
+      }
     }
   }
 
@@ -130,17 +113,19 @@ public:
    */
   void inline invertLED(const uint8_t row, const uint8_t col) {
 
-    constexpr uint32_t TOP_BIT = 1L << 31;
-    const uint8_t pos = row * LED_MATRIX_WIDTH + col;
+    if (row < LED_MATRIX_HEIGHT && col < LED_MATRIX_WIDTH) {
+      constexpr uint32_t TOP_BIT = 1L << 31;
+      const uint8_t pos = row * LED_MATRIX_WIDTH + col;
 
-    // Each part of the data array has 32 bits, so we divide by 2^5 to
-    // determine which part of the array to update.
-    const uint8_t data_index = pos >> 5;
+      // Each part of the data array has 32 bits, so we divide by 2^5 = 32 to
+      // determine which part of the array to update.
+      const uint8_t data_index = pos >> 5;
 
-    // The remainder determines which bit should be updated.
-    const uint8_t rem = pos % 32;
+      // The remainder determines which bit should be updated.
+      const uint8_t rem = pos % 32;
 
-    data[data_index] ^= (TOP_BIT >> rem);
+      data[data_index] ^= (TOP_BIT >> rem);
+    }
   }
 
   // Draws a [width]-by-[height] symbol to the LED matrix with its bottom
