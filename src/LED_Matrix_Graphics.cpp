@@ -55,11 +55,9 @@ void Frame::put_sym_bnd(const bool *symbol, const int8_t row, const int8_t col,
   }
 }
 
-void Frame::fill_rect(const int8_t row_l, const int8_t col_l,
-                      const int8_t row_h, const int8_t col_h, const bool bit) {
-
-  for (int8_t col = col_l; col <= col_h; col++) {
-    for (int8_t row = row_l; row <= row_h; row++) {
+void Frame::fillRect(const Rect &area, const bool bit) {
+  for (int8_t col = area.low_col; col <= area.high_col; col++) {
+    for (int8_t row = area.low_row; row <= area.high_row; row++) {
       setLED(row, col, bit);
     }
   }

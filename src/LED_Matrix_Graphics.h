@@ -155,6 +155,15 @@ public:
     }
   }
 
+  // Sets all LEDs in a rectangle given by vertices ([row_l], [col_l]) and
+  // ([row_h], [col_h]) to the value of [bit].
+  void fillRect(const Rect &area, const bool bit);
+
+  // Inverts all LEDs in a rectangle given by vertices ([row_l], [col_l]) and
+  // ([row_h], [col_h]).
+  void invert_rect(const int8_t row_l, const int8_t col_l, const int8_t row_h,
+                   const int8_t col_h);
+
   // Draws a [width]-by-[height] symbol to the LED matrix with its bottom
   // right corner at coordinates given by [row] and [column]. All LEDs
   // used by the symbol must lie within the matrix.
@@ -166,16 +175,6 @@ public:
   void put_sym_bnd(const bool *symbols, const int8_t row, const int8_t col,
                    const int8_t width, const int8_t height, const int8_t row_l,
                    const int8_t col_l, const int8_t row_h, const int8_t col_h);
-
-  // Sets all LEDs in a rectangle given by vertices ([row_l], [col_l]) and
-  // ([row_h], [col_h]) to the value of [bit].
-  void fill_rect(const int8_t row_l, const int8_t col_l, const int8_t row_h,
-                 const int8_t col_h, const bool bit);
-
-  // Inverts all LEDs in a rectangle given by vertices ([row_l], [col_l]) and
-  // ([row_h], [col_h]).
-  void invert_rect(const int8_t row_l, const int8_t col_l, const int8_t row_h,
-                   const int8_t col_h);
 
   // Prints [msg] of length [msg_len] inside of a text box between [col_l] and
   // [col_h], with [row] being the lowest row and [spacing] being the amount
