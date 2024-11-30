@@ -70,25 +70,6 @@ void Frame::drawSprite(const bool *data, const uint8_t row, const uint8_t col,
   }
 }
 
-void Frame::put_sym_bnd(const bool *symbol, const int8_t row, const int8_t col,
-                        const int8_t width, const int8_t height,
-                        const int8_t row_l, const int8_t col_l,
-                        const int8_t row_h, const int8_t col_h) {
-  for (int8_t add_col = 0; add_col < width; add_col++) {
-    if (col + add_col > col_h || col + add_col < col_l) {
-      continue;
-    }
-    for (int8_t add_row = 0; add_row < height; add_row++) {
-      if (row + add_row > row_h || row + add_row < row_l) {
-        continue;
-      }
-
-      setLED(row + add_row, col + add_col,
-             *(symbol + sizeof(bool) * (add_col + add_row * width)));
-    }
-  }
-}
-
 void Frame::draw_text_3_4(const bool symbols[][12], int8_t col_h, int8_t col_l,
                           const int8_t row, const uint8_t msg[],
                           const std::size_t msg_len, const uint8_t spacing,

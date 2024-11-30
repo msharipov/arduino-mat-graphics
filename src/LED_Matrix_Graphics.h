@@ -187,12 +187,6 @@ public:
   void drawSprite(const bool *sprite, const uint8_t row, const uint8_t col,
                   const uint8_t width, const uint8_t height);
 
-  // Works like put_sym() but skips every position that is outside of the
-  // rectangle given by vertices ([row_l], [col_l]) and ([row_h], [col_h]).
-  void put_sym_bnd(const bool *symbols, const int8_t row, const int8_t col,
-                   const int8_t width, const int8_t height, const int8_t row_l,
-                   const int8_t col_l, const int8_t row_h, const int8_t col_h);
-
   // Prints [msg] of length [msg_len] inside of a text box between [col_l] and
   // [col_h], with [row] being the lowest row and [spacing] being the amount
   // of empty space between each symbol. [step] shifts the text inside of the
