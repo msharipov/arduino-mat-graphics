@@ -120,6 +120,55 @@ void runBenchmarksSetLED() {
   }
 }
 
+/// Runs a single benchmark for Frame::setLED_fast.
+const std::tuple<double, double> timeSetLED_fast(const uint32_t iterations) {
+  std::array<double, SET_LED_RUNS> times {};
+  for (uint32_t run = 0; run < SET_LED_RUNS; run++) {
+    const uint32_t start_time = micros();
+
+    // Time how long it takes to generate the row-col combinations
+    volatile uint8_t pos {};
+    volatile uint8_t row {};
+    volatile uint8_t col {};
+    volatile bool consumer {};
+    for (uint32_t count = 0; count < iterations; count++) {
+      pos = count % TOTAL_LED_COUNT;
+      row = pos % LMG::LED_MATRIX_HEIGHT;
+      col = pos / LMG::LED_MATRIX_WIDTH;
+      consumer = static_cast<bool>(rand() % 2);
+    }
+    const uint32_t generation_time = micros() - start_time;
+
+    for (uint32_t count = 0; count < iterations; count++) {
+      pos = count % TOTAL_LED_COUNT;
+      row = pos % LMG::LED_MATRIX_HEIGHT;
+      col = pos / LMG::LED_MATRIX_WIDTH;
+      frame.setLED_fast(row, col, static_cast<bool>(rand() % 2));
+    }
+    const uint32_t final_time = micros();
+
+    // Time in microseconds
+    const double total = static_cast<double>(
+      final_time - 2 * generation_time - start_time);
+
+    // Time per iteration in microseconds
+    const double per_iter = total / static_cast<double>(iterations);
+    times[run] = per_iter;
+  }
+
+  return getStats(times);
+}
+
+/// Runs all benchmarks for Frame::setLED_fast and prints the results over
+/// serial.
+void runBenchmarksSetLED_fast() {
+  Serial.print("Running benchmarks for Frame::setLED_fast!\n");
+  for (auto sample_size : SET_LED_SAMPLES) {
+    const std::tuple<double, double> result = timeSetLED_fast(sample_size);
+    printResults(result, sample_size, SET_LED_RUNS);
+  }
+}
+
 /// Runs a single benchmark for Frame::invertLED.
 const std::tuple<double, double> timeInvertLED(const uint32_t iterations) {
   std::array<double, INVERT_LED_RUNS> times {};
@@ -168,7 +217,7 @@ void runBenchmarksInvertLED() {
 
 void setup() {
   Serial.begin(9600);
-  runBenchmarksSetLED();
+  runBenchmarksSetLED_fast();
   runBenchmarksInvertLED();
 }
 

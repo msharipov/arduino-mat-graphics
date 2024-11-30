@@ -82,8 +82,29 @@ public:
    * @param row The row in which the LED is located.
    * @param col The column in which the LED is located.
    * @param bit Whether the LED should be on.
+   *
+   * If the LED position is out of bounds, this function does nothing.
    */
   void inline setLED(const uint8_t row, const uint8_t col, const bool bit) {
+
+    if (row < LED_MATRIX_HEIGHT && col < LED_MATRIX_WIDTH) {
+      setLED_fast(row, col, bit);
+    }
+  }
+
+  /// Sets the state of a single LED without checking bounds.
+  /**
+   * @param row The row in which the LED is located.
+   * @param col The column in which the LED is located.
+   * @param bit Whether the LED should be on.
+   *
+   * CAUTION! This function does not check whether the values of row and col
+   * are out of bounds. Calling this function with incorrect arguments is
+   * undefined behavior. Use setLED instead if you need the function to accept
+   * potentially invalid LED positions.
+   */
+  void inline setLED_fast(const uint8_t row, const uint8_t col,
+                          const bool bit) {
 
     constexpr uint32_t TOP_BIT = 1L << 31;
     const uint8_t pos = row * LED_MATRIX_WIDTH + col;
