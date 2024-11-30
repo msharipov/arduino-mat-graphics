@@ -1,3 +1,27 @@
+/*!
+ *  Copyright 2024 Maxim Sharipov (msharipovr@gmail.com).
+ *
+ *  MIT license, all text above must be included in any redistribution
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy
+ *  of this software and associated documentation files (the "Software"), to
+ *  deal in the Software without restriction, including without limitation the
+ *  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+ *  sell copies of the Software, and to permit persons to whom the Software is
+ *  furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included in
+ *  all copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ *  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+ *  IN THE SOFTWARE.
+ */
+
 #include "LED_Matrix_Graphics.h"
 
 namespace LMG {
@@ -29,7 +53,6 @@ void Frame::fillRect(const Rect &area, const bool bit) {
 }
 
 void Frame::invertRect(const Rect &area) {
-
   for (int8_t col = area.low_col; col <= area.high_col; col++) {
     for (int8_t row = area.low_row; row <= area.high_row; row++) {
       invertLED(row, col);
@@ -39,10 +62,8 @@ void Frame::invertRect(const Rect &area) {
 
 void Frame::put_sym(const bool *symbol, const int8_t row, const int8_t col,
                     const int8_t width, const int8_t height) {
-
   for (int8_t add_col = 0; add_col < width; add_col++) {
     for (int8_t add_row = 0; add_row < height; add_row++) {
-
       setLED(row + add_row, col + add_col,
              *(symbol + sizeof(bool) * (add_col + add_row * width)));
     }
@@ -53,15 +74,11 @@ void Frame::put_sym_bnd(const bool *symbol, const int8_t row, const int8_t col,
                         const int8_t width, const int8_t height,
                         const int8_t row_l, const int8_t col_l,
                         const int8_t row_h, const int8_t col_h) {
-
   for (int8_t add_col = 0; add_col < width; add_col++) {
-
     if (col + add_col > col_h || col + add_col < col_l) {
       continue;
     }
-
     for (int8_t add_row = 0; add_row < height; add_row++) {
-
       if (row + add_row > row_h || row + add_row < row_l) {
         continue;
       }
@@ -76,7 +93,6 @@ void Frame::draw_text_3_4(const bool symbols[][12], int8_t col_h, int8_t col_l,
                           const int8_t row, const uint8_t msg[],
                           const std::size_t msg_len, const uint8_t spacing,
                           const int8_t step) {
-
   col_l = (col_l < 0) ? 0 : col_l;
   col_h = (col_h > 11) ? 11 : col_h;
 
@@ -85,7 +101,7 @@ void Frame::draw_text_3_4(const bool symbols[][12], int8_t col_h, int8_t col_l,
 
   // Skip the printing if the text is completely out of bounds.
   // Warning: Removing the type cast causes incorrect integer promotion!
-  if (step >= (int16_t)(msg_len * block_width - spacing)) {
+  if (step >= static_cast<int16_t>(msg_len * block_width - spacing)) {
     fillRect(Rect(row, col_l, row + 3, col_h), 0);
     return;
   }
@@ -96,7 +112,6 @@ void Frame::draw_text_3_4(const bool symbols[][12], int8_t col_h, int8_t col_l,
   }
 
   for (int8_t sym = 0; sym < msg_len; sym++) {
-
     if (col > 11) {
       col -= block_width;
       continue;
@@ -115,7 +130,6 @@ void Frame::draw_text_3_4(const bool symbols[][12], int8_t col_h, int8_t col_l,
 
     // Tail spacing
     if (spacing != 0 && col > col_l) {
-
       int8_t spc_end = col - spacing;
       if (spc_end < col_l) {
         spc_end = col_l;
