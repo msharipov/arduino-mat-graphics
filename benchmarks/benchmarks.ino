@@ -217,6 +217,7 @@ void runBenchmarksInvertLED() {
 
 void setup() {
   Serial.begin(9600);
+  runBenchmarksSetLED();
   runBenchmarksSetLED_fast();
   runBenchmarksInvertLED();
 }
