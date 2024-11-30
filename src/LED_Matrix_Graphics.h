@@ -1,5 +1,5 @@
 /*!
- *  Created by Maxim Sharipov (msharipovr@gmail.com) 2024.
+ *  Copyright 2024 Maxim Sharipov (msharipovr@gmail.com).
  *
  *  MIT license, all text above must be included in any redistribution
  *
@@ -22,8 +22,7 @@
  *  IN THE SOFTWARE.
  */
 
-#ifndef MATRIX_PRINTING_H
-#define MATRIX_PRINTING_H
+#pragma once
 
 #include <array>
 #include <cstddef>
@@ -111,7 +110,6 @@ public:
    * If the LED position is out of bounds, this function does nothing.
    */
   void inline setLED(const uint8_t row, const uint8_t col, const bool bit) {
-
     if (row < LED_MATRIX_HEIGHT && col < LED_MATRIX_WIDTH) {
       constexpr uint32_t TOP_BIT = 1L << 31;
       const uint8_t pos = row * LED_MATRIX_WIDTH + col;
@@ -139,7 +137,6 @@ public:
    * If the LED position is out of bounds, this function does nothing.
    */
   void inline invertLED(const uint8_t row, const uint8_t col) {
-
     if (row < LED_MATRIX_HEIGHT && col < LED_MATRIX_WIDTH) {
       constexpr uint32_t TOP_BIT = 1L << 31;
       const uint8_t pos = row * LED_MATRIX_WIDTH + col;
@@ -231,5 +228,4 @@ extern const bool DIGITS_35[10][15];
  |   # | ### | ### |  #  | ### | ### |
 */
 extern const bool DEFAULT_FONT_3_4[36][12];
-} // namespace LMG
-#endif
+}  // namespace LMG
