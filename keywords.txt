@@ -1,16 +1,18 @@
 ##################################################
 # Datatypes
 ##################################################
-frame	KEYWORD1
+Frame	KEYWORD1
+Rect	KEYWORD1
 
 ##################################################
 # Functions
 ##################################################
-set_bit	KEYWORD2
-put_sym	KEYWORD2
-put_sym_bnd	KEYWORD2
-fill_rect	KEYWORD2
-draw_text_34	KEYWORD2
+getData	KEYWORD2
+setLED	KEYWORD2
+invertLED	KEYWORD2
+fillRect	KEYWORD2
+invertRect	KEYWORD2
+drawSprite	KEYWORD2
 
 ##################################################
 # Constants
