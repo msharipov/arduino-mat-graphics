@@ -84,64 +84,6 @@ void Frame::drawSprite(const bool *data, const uint8_t row, const uint8_t col,
   }
 }
 
-void Frame::draw_text_3_4(const bool symbols[][12], uint8_t col_h,
-                          uint8_t col_l, const uint8_t row, const uint8_t msg[],
-                          const std::size_t msg_len, const uint8_t spacing,
-                          const uint8_t step) {
-  col_l = (col_l < 0) ? 0 : col_l;
-  col_h = (col_h > 11) ? 11 : col_h;
-
-  const uint8_t block_width = 3 + spacing;
-  uint8_t col = col_h - (2 - step);
-
-  // Skip the printing if the text is completely out of bounds.
-  // Warning: Removing the type cast causes incorrect integer promotion!
-  if (step >= static_cast<int16_t>(msg_len * block_width - spacing)) {
-    fillRect(Rect(row, col_l, row + 3, col_h), 0);
-    return;
-  }
-
-  // Left-side spacing
-  if (step < 0) {
-    fillRect(Rect(row, col + 3, row + 3, col_h), 0);
-  }
-
-  for (uint8_t sym = 0; sym < msg_len; sym++) {
-    if (col > 11) {
-      col -= block_width;
-      continue;
-    }
-
-    if (col < -2) {
-      break;
-    }
-
-    // Tail spacing before first symbol
-    if (spacing != 0 && col_h - col >= 2 && col_h - col < block_width) {
-      fillRect(Rect(row, col + 3, row + 3, col_h), 0);
-    }
-
-    put_sym_bnd(symbols[msg[sym]], row, col, 3, 4, row, col_l, row + 3, col_h);
-
-    // Tail spacing
-    if (spacing != 0 && col > col_l) {
-      uint8_t spc_end = col - spacing;
-      if (spc_end < col_l) {
-        spc_end = col_l;
-      }
-
-      fillRect(Rect(row, spc_end, row + 3, col - 1), 0);
-    }
-
-    col -= block_width;
-  }
-
-  // Right-side space
-  if (col > col_l) {
-    fillRect(Rect(row, col_l, row + 3, col - 1), 0);
-  }
-}
-
 const bool DIGITS_35[10][15] = {{0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0},
                                 {1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 1, 0},
                                 {1, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1},

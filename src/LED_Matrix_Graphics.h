@@ -196,15 +196,6 @@ public:
    */
   void drawSprite(const bool *sprite, const uint8_t row, const uint8_t col,
                   const uint8_t width, const uint8_t height);
-
-  // Prints [msg] of length [msg_len] inside of a text box between [col_l] and
-  // [col_h], with [row] being the lowest row and [spacing] being the amount
-  // of empty space between each symbol. [step] shifts the text inside of the
-  // text box to the right (step<0) and to the left (step>0).
-  void draw_text_3_4(const bool symbols[][12], int8_t col_h, int8_t col_l,
-                     const int8_t row, const uint8_t msg[],
-                     const std::size_t msg_len, const uint8_t spacing,
-                     const int8_t step);
 };
 
 // 3-by-5 digits
