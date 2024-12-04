@@ -36,9 +36,9 @@ Rect::Rect(uint8_t row_a, uint8_t row_b, uint8_t col_a, uint8_t col_b)
   }
 
   if (col_b > col_a) {
-    high_row = row_b;
+    high_col = col_b;
   } else {
-    low_row = row_b;
+    low_col = col_b;
   }
 }
 
