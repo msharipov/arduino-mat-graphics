@@ -19,27 +19,22 @@
  *  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  *  IN THE SOFTWARE.
  */
-#include <LED_Matrix_Graphics.h>
 #include "Arduino_LED_Matrix.h"
+#include <LED_Matrix_Graphics.h>
 #include <array>
 
 ArduinoLEDMatrix matrix{};
 LMG::Frame frame{};
 
 /// Represents a Tetris piece on the screen
-class Piece {
-
-};
+class Piece {};
 
 class GameState {
   /// Holds the state of the pieces that have already been placed.
-  std::array<bool, LMG::LED_MATRIX_HEIGHT * LMG::LED_MATRIX_WIDTH> placed_pieces{};
+  std::array<bool, LMG::LED_MATRIX_HEIGHT * LMG::LED_MATRIX_WIDTH>
+      placed_pieces{};
 };
 
-void setup() {
-  matrix.begin();
-}
+void setup() { matrix.begin(); }
 
-void loop() {
-
-}
+void loop() {}
