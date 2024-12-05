@@ -58,6 +58,14 @@ std::optional<Rect> Rect::operator&(const Rect &other) {
 
 const uint32_t *Frame::getData() { return data.data(); }
 
+Frame Frame::operator+(const Frame &other) {
+  Frame sum = Frame();
+  for (size_t i = 0; i < 3; i++) {
+    sum.data[i] = data[i] | other.data[i];
+  }
+  return sum;
+}
+
 void Frame::fillRect(const Rect &area, const bool bit) {
   for (uint8_t col = area.low_col; col <= area.high_col; col++) {
     for (uint8_t row = area.low_row; row <= area.high_row; row++) {

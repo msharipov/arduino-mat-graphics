@@ -111,6 +111,14 @@ public:
    */
   const uint32_t *getData();
 
+  /// Overlays the two frames.
+  /**
+   * @param other The other frame.
+   * @returns A new frame where an LED is on if the same LED is on in either of
+   *          the two frames.
+   */
+  Frame operator+(const Frame &other);
+
   /// Sets the state of a single LED.
   /**
    * @param row The row in which the LED is located.
