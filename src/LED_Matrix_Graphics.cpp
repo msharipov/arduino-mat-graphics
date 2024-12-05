@@ -85,10 +85,10 @@ void Frame::invertRect(const Rect &area) {
 void Frame::drawSprite(const bool *data, const Rect &area) {
   const uint8_t width = area.high_col - area.low_col + 1;
   const uint8_t height = area.high_row - area.low_row + 1;
-  for (uint8_t relative_col = 0; relative_col < width; relative_col++) {
-    for (uint8_t relative_row = 0; relative_row < height; relative_row++) {
-      setLED(area.low_row + relative_row, area.low_col + relative_col,
-             data[relative_row * width + relative_col]);
+  for (uint8_t sprite_col = 0; sprite_col < width; sprite_col++) {
+    for (uint8_t sprite_row = 0; sprite_row < height; sprite_row++) {
+      setLED(area.low_row + sprite_row, area.low_col + sprite_col,
+             data[sprite_row * width + sprite_col]);
     }
   }
 }
