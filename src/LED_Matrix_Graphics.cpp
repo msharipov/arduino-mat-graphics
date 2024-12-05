@@ -82,12 +82,13 @@ void Frame::invertRect(const Rect &area) {
   }
 }
 
-void Frame::drawSprite(const bool *data, const uint8_t row, const uint8_t col,
-                       const uint8_t width, const uint8_t height) {
-  for (uint8_t add_col = 0; add_col < width; add_col++) {
-    for (uint8_t add_row = 0; add_row < height; add_row++) {
-      setLED(row + add_row, col + add_col,
-             *(data + sizeof(bool) * (add_col + add_row * width)));
+void Frame::drawSprite(const bool *data, const Rect &area) {
+  const uint8_t width = area.high_col - area.low_col + 1;
+  const uint8_t height = area.high_row - area.low_row + 1;
+  for (uint8_t relative_col = 0; relative_col < width; relative_col++) {
+    for (uint8_t relative_row = 0; relative_row < height; relative_row++) {
+      setLED(area.low_row + relative_row, area.low_col + relative_col,
+          data[relative_row * width + relative_col]);
     }
   }
 }
