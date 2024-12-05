@@ -88,7 +88,7 @@ void Frame::drawSprite(const bool *data, const Rect &area) {
   for (uint8_t relative_col = 0; relative_col < width; relative_col++) {
     for (uint8_t relative_row = 0; relative_row < height; relative_row++) {
       setLED(area.low_row + relative_row, area.low_col + relative_col,
-          data[relative_row * width + relative_col]);
+             data[relative_row * width + relative_col]);
     }
   }
 }

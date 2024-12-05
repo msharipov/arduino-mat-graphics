@@ -202,7 +202,7 @@ public:
    *  `s[4]  s[5]  s[6]  s[7]`
    *  `s[8]  s[5] s[10] s[11]`
    */
-  void drawSprite(const bool *sprite, const Rect& area);
+  void drawSprite(const bool *sprite, const Rect &area);
 };
 
 // 3-by-5 digits
