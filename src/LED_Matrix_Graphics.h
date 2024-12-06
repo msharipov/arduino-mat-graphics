@@ -185,10 +185,8 @@ public:
 
   /// Draws a sprite to the LED matrix.
   /**
-   * @param sprite  Pointer to the sprite data.
-   * @param row,col Position of the top left corner of the sprite.
-   * @param width   Width of the sprite.
-   * @param height  Height of the sprite.
+   * @param sprite Pointer to the sprite data.
+   * @param area   Area of the LED matrix where the sprite should be drawn.
    *
    * The sprite must be laid out sequentially in memory row-by-row. For
    * example, given a sprite with 3 rows and 4 columns, if our sprite array
