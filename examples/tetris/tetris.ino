@@ -26,8 +26,18 @@
 ArduinoLEDMatrix matrix{};
 LMG::Frame frame{};
 
+
+
 /// Represents a Tetris piece on the screen
-class Piece {};
+class Piece {
+
+  enum class PieceType {
+    Bar,
+    Block,
+  };
+
+  PieceType type{};
+};
 
 class GameState {
   /// Holds the state of the pieces that have already been placed.
