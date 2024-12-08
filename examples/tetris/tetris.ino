@@ -26,17 +26,30 @@
 ArduinoLEDMatrix matrix{};
 LMG::Frame frame{};
 
-
-
 /// Represents a Tetris piece on the screen
 class Piece {
-
+public:
   enum class PieceType {
     Bar,
     Block,
   };
 
-  PieceType type{};
+private:
+  PieceType ptype{};
+  LMG::Rect area{0, 0, 0, 0};
+
+public:
+  explicit Piece(const PieceType _ptype) {
+    ptype = _ptype;
+    switch (ptype) {
+    case PieceType::Block:
+      area = LMG::Rect(3, 4, 10, 11);
+      break;
+    case PieceType::Bar:
+      area = LMG::Rect(2, 5, 11, 11);
+      break;
+    }
+  }
 };
 
 class GameState {
