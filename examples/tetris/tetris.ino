@@ -28,6 +28,8 @@ LMG::Frame frame{};
 
 /// Represents a Tetris piece on the screen
 class Piece {
+  friend class GameState;
+
 public:
   enum class PieceType {
     Bar,
@@ -39,6 +41,7 @@ private:
   LMG::Rect area{0, 0, 0, 0};
 
 public:
+  /// Constructs a new piece at the top of the screen
   explicit Piece(const PieceType _ptype) {
     ptype = _ptype;
     switch (ptype) {
@@ -54,8 +57,37 @@ public:
 
 class GameState {
   /// Holds the state of the pieces that have already been placed.
-  std::array<bool, LMG::LED_MATRIX_HEIGHT * LMG::LED_MATRIX_WIDTH>
+  std::array<std::array<bool, LMG::LED_MATRIX_WIDTH>, LMG::LED_MATRIX_HEIGHT>
       placed_pieces{};
+
+  /// Holds the state of the active piece
+  Piece current_piece{Piece::PieceType::Block};
+
+  /// Control how fast the game runs in milliseconds per game tick.
+  static constexpr uint32_t MS_PER_TICK{100};
+
+public:
+  GameState() {}
+
+  bool canDescend() {
+    using LMG::Frame;
+    if (current_piece.area.getLowCol() == 0) {
+      return false;
+    }
+    switch (current_piece.ptype) {
+    case Piece::PieceType::Block: {
+      const uint8_t col = current_piece.area.getLowCol() - 1;
+      const uint8_t low_row = current_piece.area.getLowRow();
+      return !(placed_pieces[low_row][col] || placed_pieces[low_row + 1][col]);
+    }
+    case Piece::PieceType::Bar: {
+      const uint8_t col = current_piece.area.getLowCol() - 1;
+      const uint8_t low_row = current_piece.area.getLowRow();
+      return !(placed_pieces[low_row][col] || placed_pieces[low_row + 1][col] ||
+             placed_pieces[low_row + 2][col] || placed_pieces[low_row + 3][col]);
+    }
+    }
+  }
 };
 
 void setup() { matrix.begin(); }
