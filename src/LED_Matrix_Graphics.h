@@ -94,13 +94,13 @@ public:
   /**
    * @returns The lowest row in the rectangle.
    */
-  uint8_t get_low_row();
+  uint8_t getLowRow();
 
   /// Returns the lower of the two bounding columns.
   /**
    * @returns The lowest col in the rectangle.
    */
-  uint8_t get_low_col();
+  uint8_t getLowCol();
 };
 
 /// Stores the state of the LED matrix.

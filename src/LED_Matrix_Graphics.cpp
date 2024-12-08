@@ -56,9 +56,9 @@ std::optional<Rect> Rect::operator&(const Rect &other) {
       std::max(low_col, other.low_col), std::min(high_col, other.high_col)};
 }
 
-uint8_t Rect::get_low_row() { return low_row; }
+uint8_t Rect::getLowRow() { return low_row; }
 
-uint8_t Rect::get_low_col() { return low_col; }
+uint8_t Rect::getLowCol() { return low_col; }
 
 const uint32_t *Frame::getData() { return data.data(); }
 
