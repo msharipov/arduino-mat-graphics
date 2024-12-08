@@ -131,7 +131,7 @@ public:
    */
   Frame operator+(const Frame &other);
 
-  /// Compute the intersection of two frams.
+  /// Compute the intersection of two frames.
   /**
    * @param other The other frame.
    * @returns A new frame where an LED is on only if the same LED is on in both
