@@ -89,6 +89,18 @@ public:
    *          returns std::nullopt.
    */
   std::optional<Rect> operator&(const Rect &other);
+
+  /// Returns the lower of the two bounding rows.
+  /**
+   * @returns The lowest row in the rectangle.
+   */
+  uint8_t get_low_row();
+
+  /// Returns the lower of the two bounding columns.
+  /**
+   * @returns The lowest col in the rectangle.
+   */
+  uint8_t get_low_col();
 };
 
 /// Stores the state of the LED matrix.
