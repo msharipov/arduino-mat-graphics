@@ -139,6 +139,12 @@ public:
    */
   Frame operator&(const Frame &other);
 
+  /// Checks if any LEDs are on in the frame.
+  /**
+   * @returns True, if at least one LED is on in the frame; false, otherwise.
+   */
+  explicit operator bool();
+
   /// Sets the state of a single LED.
   /**
    * @param row The row in which the LED is located.

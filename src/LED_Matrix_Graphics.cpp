@@ -78,6 +78,8 @@ Frame Frame::operator&(const Frame &other) {
   return intersection;
 }
 
+Frame::operator bool() { return data[0] || data[1] || data[2]; }
+
 void Frame::fillRect(const Rect &area, const bool bit) {
   for (uint8_t col = area.low_col; col <= area.high_col; col++) {
     for (uint8_t row = area.low_row; row <= area.high_row; row++) {
