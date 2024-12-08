@@ -131,6 +131,14 @@ public:
    */
   Frame operator+(const Frame &other);
 
+  /// Compute the intersection of two frams.
+  /**
+   * @param other The other frame.
+   * @returns A new frame where an LED is on only if the same LED is on in both
+   *          of the two frames.
+   */
+  Frame operator&(const Frame &other);
+
   /// Sets the state of a single LED.
   /**
    * @param row The row in which the LED is located.

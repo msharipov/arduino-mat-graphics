@@ -70,6 +70,14 @@ Frame Frame::operator+(const Frame &other) {
   return sum;
 }
 
+Frame Frame::operator&(const Frame &other) {
+  Frame intersection = Frame();
+  for (size_t i = 0; i < 3; i++) {
+    intersection.data[i] = data[i] & other.data[i];
+  }
+  return intersection;
+}
+
 void Frame::fillRect(const Rect &area, const bool bit) {
   for (uint8_t col = area.low_col; col <= area.high_col; col++) {
     for (uint8_t row = area.low_row; row <= area.high_row; row++) {
