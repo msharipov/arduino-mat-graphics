@@ -69,6 +69,11 @@ class GameState {
 public:
   GameState() {}
 
+  /// Checks if the currently active piece can descend.
+  /**
+   * @returns True, if the piece can descend. False, if it reached the bottom
+   *          or there is an obstacle in the way.
+   */
   bool canDescend() {
     using LMG::Frame;
     if (current_piece.area.getLowCol() == 0) {
@@ -84,7 +89,8 @@ public:
       const uint8_t col = current_piece.area.getLowCol() - 1;
       const uint8_t low_row = current_piece.area.getLowRow();
       return !(placed_pieces[low_row][col] || placed_pieces[low_row + 1][col] ||
-             placed_pieces[low_row + 2][col] || placed_pieces[low_row + 3][col]);
+               placed_pieces[low_row + 2][col] ||
+               placed_pieces[low_row + 3][col]);
     }
     }
   }
