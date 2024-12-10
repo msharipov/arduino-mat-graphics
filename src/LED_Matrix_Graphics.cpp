@@ -60,6 +60,10 @@ uint8_t Rect::getLowRow() { return low_row; }
 
 uint8_t Rect::getLowCol() { return low_col; }
 
+uint8_t Rect::getHighRow() { return high_row; }
+
+uint8_t Rect::getHighCol() { return high_col; }
+
 const uint32_t *Frame::getData() { return data.data(); }
 
 Frame Frame::operator+(const Frame &other) {

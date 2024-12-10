@@ -98,9 +98,21 @@ public:
 
   /// Returns the lower of the two bounding columns.
   /**
-   * @returns The lowest col in the rectangle.
+   * @returns The lowest column in the rectangle.
    */
   uint8_t getLowCol();
+
+  /// Returns the higher of the two bounding rows.
+  /**
+   * @returns The highest row in the rectangle.
+   */
+  uint8_t getHighRow();
+
+  /// Returns the higher of the two bounding columns.
+  /**
+   * @returns The highest column in the rectangle.
+   */
+  uint8_t getHighCol();
 };
 
 /// Stores the state of the LED matrix.
