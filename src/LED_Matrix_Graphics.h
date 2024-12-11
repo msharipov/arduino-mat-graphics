@@ -113,6 +113,16 @@ public:
    * @returns The highest column in the rectangle.
    */
   uint8_t getHighCol();
+
+  /// Shifts the rectangle across rows.
+  /**
+   * @param shift How many rows to shift the rectangle by.
+   *
+   * Does not affect the columns of the rectangle. If the rectangle would be
+   * shifted into the negative rows, sets the lowest row to 0 instead.
+   * Similarly prevents overflow if the shift value is too high.
+   */
+  void shiftRows(int8_t shift);
 };
 
 /// Stores the state of the LED matrix.
