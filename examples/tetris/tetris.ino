@@ -36,6 +36,9 @@ public:
     Block,
   };
 
+  /// Total number of different piece types
+  static constexpr size_t NUMBER_OF_TYPES{2};
+
 private:
   PieceType ptype{};
   LMG::Rect area{0, 0, 0, 0};
@@ -117,8 +120,15 @@ public:
       placed_pieces[low_row + 3][col] = true;
     }
   }
+  }
+
+  Piece randomPiece() {
+    return Piece(Piece::PieceType(rand() % Piece::NUMBER_OF_TYPES));
+  }
 };
 
 void setup() { matrix.begin(); }
 
-void loop() {}
+void loop() {
+
+}
