@@ -70,6 +70,9 @@ class GameState {
   /// Holds the state of the active piece
   Piece current_piece{Piece::PieceType::Block};
 
+  /// Holds the current game time
+  uint32_t current_tick{0};
+
 public:
   GameState() { current_piece = Piece::randomPiece(); }
 
@@ -145,26 +148,29 @@ public:
                       current_piece.area);
     return active;
   }
+
+  void nextTick() {
+    current_tick++;
+    if (current_tick % TICKS_PER_DESCENT == 0) {
+      if (canDescend()) {
+        descend();
+      } else {
+        placeCurrentPiece();
+      }
+    }
+    delay(GameState::MS_PER_TICK);
+  }
 };
 
 ArduinoLEDMatrix matrix{};
 LMG::Frame placed{};
 GameState game{};
-uint32_t current_tick{1};
 
 void setup() { matrix.begin(); }
 
 void loop() {
   using LMG::Frame;
+  game.nextTick();
+  placed = game.drawPlaced();
   matrix.loadFrame((placed + game.drawActive()).getData());
-  delay(GameState::MS_PER_TICK);
-  if (game.canDescend()) {
-    if (current_tick % GameState::TICKS_PER_DESCENT == 0) {
-      game.descend();
-    }
-  } else {
-    game.placeCurrentPiece();
-    placed = game.drawPlaced();
-  }
-  current_tick++;
 }
