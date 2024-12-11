@@ -75,7 +75,6 @@ public:
    *          or there is an obstacle in the way.
    */
   bool canDescend() {
-    using LMG::Frame;
     if (current_piece.area.getLowCol() == 0) {
       return false;
     }
