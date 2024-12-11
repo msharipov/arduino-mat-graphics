@@ -28,12 +28,17 @@ class Piece {
 
 public:
   enum class PieceType {
-    Bar,
     Block,
+    HorizontalBar,
   };
 
   /// Total number of different piece types
   static constexpr size_t NUMBER_OF_TYPES{2};
+
+  static constexpr bool SPRITES[][6] = {
+      {true, true, true, true}, // Block
+      {true, true, true, true}, // HorizontalBar
+  };
 
 private:
   PieceType ptype{};
@@ -47,7 +52,7 @@ public:
     case PieceType::Block:
       area = LMG::Rect(3, 4, 10, 11);
       break;
-    case PieceType::Bar:
+    case PieceType::HorizontalBar:
       area = LMG::Rect(2, 5, 11, 11);
       break;
     }
@@ -86,7 +91,7 @@ public:
       const uint8_t low_row = current_piece.area.getLowRow();
       return !(placed_pieces[low_row][col] || placed_pieces[low_row + 1][col]);
     }
-    case Piece::PieceType::Bar: {
+    case Piece::PieceType::HorizontalBar: {
       const uint8_t col = current_piece.area.getLowCol() - 1;
       const uint8_t low_row = current_piece.area.getLowRow();
       return !(placed_pieces[low_row][col] || placed_pieces[low_row + 1][col] ||
@@ -109,7 +114,7 @@ public:
       placed_pieces[low_row + 1][low_col + 1] = true;
       break;
     }
-    case Piece::PieceType::Bar: {
+    case Piece::PieceType::HorizontalBar: {
       const uint8_t col = current_piece.area.getLowCol();
       const uint8_t low_row = current_piece.area.getLowRow();
       placed_pieces[low_row][col] = true;
@@ -129,6 +134,13 @@ public:
         LMG::Rect(0, LMG::LED_MATRIX_HEIGHT - 1, 0, LMG::LED_MATRIX_WIDTH - 1));
     return placed;
   }
+
+  LMG::Frame drawActive() {
+    LMG::Frame active{};
+    active.drawSprite(Piece::SPRITES[static_cast<int32_t>(current_piece.ptype)],
+                      current_piece.area);
+    return active;
+  }
 };
 
 ArduinoLEDMatrix matrix{};
@@ -139,7 +151,7 @@ void setup() { matrix.begin(); }
 
 void loop() {
   using LMG::Frame;
-  matrix.loadFrame(placed.getData());
+  matrix.loadFrame((placed + game.drawActive()).getData());
   delay(GameState::MS_PER_TICK);
   if (game.canDescend()) {
     game.descend();
