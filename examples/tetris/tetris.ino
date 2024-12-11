@@ -73,8 +73,12 @@ class GameState {
 public:
   GameState() { current_piece = Piece::randomPiece(); }
 
-  /// Control how fast the game runs in milliseconds per game tick.
+  /// Controls how fast the game runs in milliseconds per game tick.
   static constexpr uint32_t MS_PER_TICK{100};
+
+  /// Controls how many ticks pass before the active piece descends
+  /// automatically.
+  static constexpr uint32_t TICKS_PER_DESCENT{10};
 
   /// Checks if the currently active piece can descend.
   /**
@@ -146,6 +150,7 @@ public:
 ArduinoLEDMatrix matrix{};
 LMG::Frame placed{};
 GameState game{};
+uint32_t current_tick{1};
 
 void setup() { matrix.begin(); }
 
@@ -154,9 +159,12 @@ void loop() {
   matrix.loadFrame((placed + game.drawActive()).getData());
   delay(GameState::MS_PER_TICK);
   if (game.canDescend()) {
-    game.descend();
+    if (current_tick % GameState::TICKS_PER_DESCENT == 0) {
+      game.descend();
+    }
   } else {
     game.placeCurrentPiece();
     placed = game.drawPlaced();
   }
+  current_tick++;
 }
