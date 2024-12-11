@@ -21,10 +21,6 @@
  */
 #include "Arduino_LED_Matrix.h"
 #include <LED_Matrix_Graphics.h>
-#include <array>
-
-ArduinoLEDMatrix matrix{};
-LMG::Frame frame{};
 
 /// Represents a Tetris piece on the screen
 class Piece {
@@ -56,21 +52,24 @@ public:
       break;
     }
   }
+
+  static Piece randomPiece() {
+    return Piece(Piece::PieceType(rand() % Piece::NUMBER_OF_TYPES));
+  }
 };
 
 class GameState {
   /// Holds the state of the pieces that have already been placed.
-  std::array<std::array<bool, LMG::LED_MATRIX_WIDTH>, LMG::LED_MATRIX_HEIGHT>
-      placed_pieces{};
+  bool placed_pieces[LMG::LED_MATRIX_HEIGHT][LMG::LED_MATRIX_WIDTH] = {0};
 
   /// Holds the state of the active piece
   Piece current_piece{Piece::PieceType::Block};
 
+public:
+  GameState() { current_piece = Piece::randomPiece(); }
+
   /// Control how fast the game runs in milliseconds per game tick.
   static constexpr uint32_t MS_PER_TICK{100};
-
-public:
-  GameState() {}
 
   /// Checks if the currently active piece can descend.
   /**
@@ -97,9 +96,7 @@ public:
     }
   }
 
-  void descend() {
-    current_piece.area.shiftColumns(-1);
-  }
+  void descend() { current_piece.area.shiftColumns(-1); }
 
   bool placeCurrentPiece() {
     switch (current_piece.ptype) {
@@ -110,6 +107,7 @@ public:
       placed_pieces[low_row][low_col + 1] = true;
       placed_pieces[low_row + 1][low_col] = true;
       placed_pieces[low_row + 1][low_col + 1] = true;
+      break;
     }
     case Piece::PieceType::Bar: {
       const uint8_t col = current_piece.area.getLowCol();
@@ -118,17 +116,35 @@ public:
       placed_pieces[low_row + 1][col] = true;
       placed_pieces[low_row + 2][col] = true;
       placed_pieces[low_row + 3][col] = true;
+      break;
     }
-  }
+    }
+    current_piece = Piece::randomPiece();
   }
 
-  Piece randomPiece() {
-    return Piece(Piece::PieceType(rand() % Piece::NUMBER_OF_TYPES));
+  LMG::Frame drawPlaced() {
+    LMG::Frame placed{};
+    placed.drawSprite(
+        &placed_pieces[0][0],
+        LMG::Rect(0, LMG::LED_MATRIX_HEIGHT - 1, 0, LMG::LED_MATRIX_WIDTH - 1));
+    return placed;
   }
 };
+
+ArduinoLEDMatrix matrix{};
+LMG::Frame placed{};
+GameState game{};
 
 void setup() { matrix.begin(); }
 
 void loop() {
-
+  using LMG::Frame;
+  matrix.loadFrame(placed.getData());
+  delay(GameState::MS_PER_TICK);
+  if (game.canDescend()) {
+    game.descend();
+  } else {
+    game.placeCurrentPiece();
+    placed = game.drawPlaced();
+  }
 }
