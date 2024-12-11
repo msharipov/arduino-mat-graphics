@@ -82,6 +82,24 @@ void Rect::shiftRows(int8_t shift) {
   }
 }
 
+void Rect::shiftColumns(int8_t shift) {
+  if (shift < 0) {
+    uint8_t unsigned_shift = static_cast<uint8_t>(-shift);
+    if (unsigned_shift > low_col) {
+      unsigned_shift = low_col;
+    }
+    low_col -= unsigned_shift;
+    high_col -= unsigned_shift;
+  } else {
+    uint8_t unsigned_shift = static_cast<uint8_t>(shift);
+    if (255 - high_col < unsigned_shift) {
+      unsigned_shift = 255 - high_col;
+    }
+    low_col += unsigned_shift;
+    high_col += unsigned_shift;
+  }
+}
+
 const uint32_t *Frame::getData() { return data.data(); }
 
 Frame Frame::operator+(const Frame &other) {

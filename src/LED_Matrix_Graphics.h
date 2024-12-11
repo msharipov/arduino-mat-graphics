@@ -123,7 +123,16 @@ public:
    * Similarly prevents overflow if the shift value is too high.
    */
   void shiftRows(int8_t shift);
-};
+
+  /// Shifts the rectangle across columns.
+  /**
+   * @param shift How many columns to shift the rectangle by.
+   *
+   * Does not affect the rows of the rectangle. If the rectangle would be
+   * shifted into the negative columns, sets the lowest column to 0 instead.
+   * Similarly prevents overflow if the shift value is too high.
+   */
+  void shiftColumns(int8_t shift);};
 
 /// Stores the state of the LED matrix.
 class Frame {
