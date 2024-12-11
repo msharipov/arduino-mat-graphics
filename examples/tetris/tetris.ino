@@ -93,6 +93,30 @@ public:
     }
     }
   }
+
+  void descend() {
+    current_piece.area.shiftColumns(-1);
+  }
+
+  bool placeCurrentPiece() {
+    switch (current_piece.ptype) {
+    case Piece::PieceType::Block: {
+      const uint8_t low_col = current_piece.area.getLowCol();
+      const uint8_t low_row = current_piece.area.getLowRow();
+      placed_pieces[low_row][low_col] = true;
+      placed_pieces[low_row][low_col + 1] = true;
+      placed_pieces[low_row + 1][low_col] = true;
+      placed_pieces[low_row + 1][low_col + 1] = true;
+    }
+    case Piece::PieceType::Bar: {
+      const uint8_t col = current_piece.area.getLowCol();
+      const uint8_t low_row = current_piece.area.getLowRow();
+      placed_pieces[low_row][col] = true;
+      placed_pieces[low_row + 1][col] = true;
+      placed_pieces[low_row + 2][col] = true;
+      placed_pieces[low_row + 3][col] = true;
+    }
+  }
 };
 
 void setup() { matrix.begin(); }
