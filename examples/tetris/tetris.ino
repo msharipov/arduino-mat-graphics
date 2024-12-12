@@ -152,13 +152,17 @@ public:
   void nextTick() {
     current_tick++;
     if (current_tick % TICKS_PER_DESCENT == 0) {
-      if (canDescend()) {
-        descend();
-      } else {
-        placeCurrentPiece();
-      }
+      tryDescend();
     }
     delay(GameState::MS_PER_TICK);
+  }
+
+  void tryDescend() {
+    if (canDescend()) {
+      descend();
+    } else {
+      placeCurrentPiece();
+    }
   }
 };
 
@@ -166,10 +170,18 @@ ArduinoLEDMatrix matrix{};
 LMG::Frame placed{};
 GameState game{};
 
-void setup() { matrix.begin(); }
+constexpr pin_size_t DROP_PIECE_BUTTON{2};
+
+void setup() {
+  matrix.begin();
+  pinMode(DROP_PIECE_BUTTON, INPUT);
+}
 
 void loop() {
   using LMG::Frame;
+  if (digitalRead(DROP_PIECE_BUTTON) == HIGH) {
+    game.tryDescend();
+  }
   game.nextTick();
   placed = game.drawPlaced();
   matrix.loadFrame((placed + game.drawActive()).getData());
