@@ -240,6 +240,15 @@ public:
       current_piece.area.shiftRows(1);
     }
   }
+
+  void clearLine(const size_t line) {
+    if (line >= LMG::LED_MATRIX_HEIGHT - 1) {
+      return;
+    }
+    for (size_t row = 0; row < LMG::LED_MATRIX_HEIGHT; row++) {
+      placed_pieces[row][line] = placed_pieces[row][line + 1];
+    }
+  }
 };
 
 ArduinoLEDMatrix matrix{};
