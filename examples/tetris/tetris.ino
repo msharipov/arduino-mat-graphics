@@ -191,9 +191,9 @@ public:
 
   void rotatePiece() {
     switch (current_piece.ptype) {
-    case Block:
+    case Piece::PieceType::Block:
       break;
-    case VerticalBar:
+    case Piece::PieceType::VerticalBar: {
       const uint8_t new_col = current_piece.area.getLowCol();
       uint8_t new_low_row = current_piece.area.getLowRow();
       // Adjust the new position so that it fits on the screen
@@ -207,10 +207,11 @@ public:
         new_high_row = LMG::LED_MATRIX_HEIGHT - 1;
         new_low_row = LMG::LED_MATRIX_HEIGHT - 5;
       }
-      current_piece.area = Rect(new_low_row, new_high_row, new_col, new_col);
-      current_piece.ptype = HorizontalBar;
+      current_piece.area = LMG::Rect(new_low_row, new_high_row, new_col, new_col);
+      current_piece.ptype = Piece::PieceType::HorizontalBar;
       break;
-    case HorizontalBar:
+    }
+    case Piece::PieceType::HorizontalBar: {
       const uint8_t new_row = current_piece.area.getLowRow() + 2;
       uint8_t new_low_col = current_piece.area.getLowCol();
       uint8_t new_high_col = new_low_col + 4;
@@ -219,9 +220,10 @@ public:
         new_high_col = LMG::LED_MATRIX_WIDTH - 1;
         new_low_col = LMG::LED_MATRIX_WIDTH - 5;
       }
-      current_piece.area = Rect(new_row, new_row, new_low_col, new_high_col);
-      current_piece.ptype = VerticalBar;
+      current_piece.area = LMG::Rect(new_row, new_row, new_low_col, new_high_col);
+      current_piece.ptype = Piece::PieceType::VerticalBar;
       break;
+    }
     }
   }
 };
