@@ -156,6 +156,7 @@ public:
     }
     }
     current_piece = Piece::randomPiece();
+    updateLines();
   }
 
   LMG::Frame drawPlaced() {
@@ -248,6 +249,24 @@ public:
     for (size_t row = 0; row < LMG::LED_MATRIX_HEIGHT; row++) {
       placed_pieces[row][line] = placed_pieces[row][line + 1];
     }
+    clearLine(line + 1);
+  }
+
+  void updateLines() {
+    size_t line = LMG::LED_MATRIX_WIDTH - 1;
+    do {
+      line--;
+      bool full{true};
+      for (size_t row = 0; row < LMG::LED_MATRIX_HEIGHT; row++) {
+        if (!placed_pieces[row][line]) {
+          full = false;
+          break;
+        }
+      }
+      if (full) {
+        clearLine(line);
+      }
+    } while (line != 0);
   }
 };
 
