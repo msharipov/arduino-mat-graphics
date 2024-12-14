@@ -246,24 +246,54 @@ ArduinoLEDMatrix matrix{};
 LMG::Frame placed{};
 GameState game{};
 bool rotate_button_pushed{false};
+bool shift_left_button_pushed{false};
+bool shift_right_button_pushed{false};
 
 constexpr pin_size_t DROP_PIECE_BUTTON{2};
 constexpr pin_size_t ROTATE_PIECE_BUTTON{3};
+constexpr pin_size_t SHIFT_LEFT_BUTTON{4};
+constexpr pin_size_t SHIFT_RIGHT_BUTTON{5};
 
 void setup() {
   matrix.begin();
   pinMode(DROP_PIECE_BUTTON, INPUT);
   pinMode(ROTATE_PIECE_BUTTON, INPUT);
+  pinMode(SHIFT_LEFT_BUTTON, INPUT);
+  pinMode(SHIFT_RIGHT_BUTTON, INPUT);
 }
 
 void loop() {
   using LMG::Frame;
-  if (digitalRead(ROTATE_PIECE_BUTTON) == HIGH && !rotate_button_pushed) {
-    game.rotatePiece();
-    rotate_button_pushed = true;
-  } else if (digitalRead(ROTATE_PIECE_BUTTON) == LOW) {
+  // Controls for piece rotation
+  if (digitalRead(ROTATE_PIECE_BUTTON) == HIGH) {
+    if (!rotate_button_pushed) {
+      game.rotatePiece();
+      rotate_button_pushed = true;
+    }
+  } else {
     rotate_button_pushed = false;
   }
+
+  // Controls for shifting pieces
+  if (digitalRead(SHIFT_LEFT_BUTTON) == HIGH) {
+    if (!shift_left_button_pushed) {
+      game.shiftPieceLeft();
+      shift_left_button_pushed = true;
+    }
+  } else {
+    shift_left_button_pushed = false;
+  }
+
+  if (digitalRead(SHIFT_RIGHT_BUTTON) == HIGH) {
+    if (!shift_right_button_pushed) {
+      game.shiftPieceRight();
+      shift_right_button_pushed = true;
+    }
+  } else {
+    shift_right_button_pushed = false;
+  }
+
+  // Controls for dropping pieces
   if (digitalRead(DROP_PIECE_BUTTON) == HIGH) {
     game.tryDescend();
   }
