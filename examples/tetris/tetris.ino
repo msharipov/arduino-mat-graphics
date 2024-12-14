@@ -219,7 +219,7 @@ public:
         new_high_col = LMG::LED_MATRIX_WIDTH - 1;
         new_low_col = LMG::LED_MATRIX_WIDTH - 5;
       }
-      current_piece.area = Rect(new_low_row, new_high_row, new_col, new_col);
+      current_piece.area = Rect(new_row, new_row, new_low_col, new_high_col);
       current_piece.ptype = VerticalBar;
       break;
     }
