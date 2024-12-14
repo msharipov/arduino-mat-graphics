@@ -30,6 +30,7 @@ public:
   enum class PieceType {
     Block,
     HorizontalBar,
+    VerticalBar,
   };
 
   static constexpr PieceType SPAWNABLE[] = {
@@ -40,12 +41,10 @@ public:
   static constexpr size_t SPAWNABLE_COUNT{sizeof(SPAWNABLE) /
                                           sizeof(PieceType)};
 
-  /// Total number of different piece types
-  static constexpr size_t NUMBER_OF_TYPES{2};
-
   static constexpr bool SPRITES[][6] = {
       {true, true, true, true}, // Block
       {true, true, true, true}, // HorizontalBar
+      {true, true, true, true}, // VerticalBar
   };
 
 private:
@@ -53,15 +52,20 @@ private:
   LMG::Rect area{0, 0, 0, 0};
 
 public:
-  /// Constructs a new piece at the top of the screen
+  /// Constructs a new piece at the top of the screen.
+  /**
+   * Unspawnable pieces are turned into the corresponding spawnable variant.
+   */
   explicit Piece(const PieceType _ptype) {
     ptype = _ptype;
     switch (ptype) {
     case PieceType::Block:
       area = LMG::Rect(3, 4, 10, 11);
       break;
-    case PieceType::HorizontalBar:
-      area = LMG::Rect(2, 5, 11, 11);
+    case PieceType::VerticalBar:
+      ptype = PieceType::HorizontalBar;
+      [[fallthrough]] case PieceType::HorizontalBar
+          : area = LMG::Rect(2, 5, 11, 11);
       break;
     }
   }
@@ -113,6 +117,11 @@ public:
                placed_pieces[low_row + 2][col] ||
                placed_pieces[low_row + 3][col]);
     }
+    case Piece::PieceType::VerticalBar: {
+      const uint8_t row = current_piece.area.getLowRow();
+      const uint8_t col = current_piece.area.getLowCol() - 1;
+      return !placed_pieces[row][col];
+    }
     }
   }
 
@@ -136,6 +145,14 @@ public:
       placed_pieces[low_row + 1][col] = true;
       placed_pieces[low_row + 2][col] = true;
       placed_pieces[low_row + 3][col] = true;
+      break;
+    }
+    case Piece::PieceType::VerticalBar: {
+      const uint8_t low_col = current_piece.area.getLowCol();
+      const uint8_t row = current_piece.area.getLowRow();
+      for (uint8_t add_col = 0; add_col < 4; add_col++) {
+        placed_pieces[row][low_col + add_col] = true;
+      }
       break;
     }
     }
