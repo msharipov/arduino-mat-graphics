@@ -141,10 +141,9 @@ public:
     case Piece::PieceType::HorizontalBar: {
       const uint8_t col = current_piece.area.getLowCol();
       const uint8_t low_row = current_piece.area.getLowRow();
-      placed_pieces[low_row][col] = true;
-      placed_pieces[low_row + 1][col] = true;
-      placed_pieces[low_row + 2][col] = true;
-      placed_pieces[low_row + 3][col] = true;
+      for (uint8_t add_row = 0; add_row < 4; add_row++) {
+        placed_pieces[low_row + add_row][col] = true;
+      }
       break;
     }
     case Piece::PieceType::VerticalBar: {
