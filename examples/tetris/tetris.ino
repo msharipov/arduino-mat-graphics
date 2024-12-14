@@ -231,16 +231,25 @@ public:
 ArduinoLEDMatrix matrix{};
 LMG::Frame placed{};
 GameState game{};
+bool rotate_button_pushed{false};
 
 constexpr pin_size_t DROP_PIECE_BUTTON{2};
+constexpr pin_size_t ROTATE_PIECE_BUTTON{3};
 
 void setup() {
   matrix.begin();
   pinMode(DROP_PIECE_BUTTON, INPUT);
+  pinMode(ROTATE_PIECE_BUTTON, INPUT);
 }
 
 void loop() {
   using LMG::Frame;
+  if (digitalRead(ROTATE_PIECE_BUTTON) == HIGH && !rotate_button_pushed) {
+    game.rotatePiece();
+    rotate_button_pushed = true;
+  } else if (digitalRead(ROTATE_PIECE_BUTTON) == LOW) {
+    rotate_button_pushed = false;
+  }
   if (digitalRead(DROP_PIECE_BUTTON) == HIGH) {
     game.tryDescend();
   }
