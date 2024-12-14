@@ -131,6 +131,7 @@ public:
     }
   }
 
+  /// Lowers the current active piece by one line.
   void descend() { current_piece.area.shiftColumns(-1); }
 
   bool placeCurrentPiece() {
