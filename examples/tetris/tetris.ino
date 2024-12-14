@@ -193,6 +193,35 @@ public:
     switch (current_piece.ptype) {
     case Block:
       break;
+    case VerticalBar:
+      const uint8_t new_col = current_piece.area.getLowCol();
+      uint8_t new_low_row = current_piece.area.getLowRow();
+      // Adjust the new position so that it fits on the screen
+      if (new_low_row < 2) {
+        new_low_row = 0;
+      } else {
+        new_low_row -= 2;
+      }
+      uint8_t new_high_row = new_low_row + 4;
+      if (new_high_row >= LMG::LED_MATRIX_HEIGHT) {
+        new_high_row = LMG::LED_MATRIX_HEIGHT - 1;
+        new_low_row = LMG::LED_MATRIX_HEIGHT - 5;
+      }
+      current_piece.area = Rect(new_low_row, new_high_row, new_col, new_col);
+      current_piece.ptype = HorizontalBar;
+      break;
+    case HorizontalBar:
+      const uint8_t new_row = current_piece.area.getLowRow() + 2;
+      uint8_t new_low_col = current_piece.area.getLowCol();
+      uint8_t new_high_col = new_low_col + 4;
+      // Adjust the new position so that it fits on the screen
+      if (new_high_col >= LMG::LED_MATRIX_WIDTH) {
+        new_high_col = LMG::LED_MATRIX_WIDTH - 1;
+        new_low_col = LMG::LED_MATRIX_WIDTH - 5;
+      }
+      current_piece.area = Rect(new_low_row, new_high_row, new_col, new_col);
+      current_piece.ptype = VerticalBar;
+      break;
     }
   }
 };
