@@ -32,6 +32,14 @@ public:
     HorizontalBar,
   };
 
+  static constexpr PieceType SPAWNABLE[] = {
+      PieceType::Block,
+      PieceType::HorizontalBar,
+  };
+
+  static constexpr size_t SPAWNABLE_COUNT{sizeof(SPAWNABLE) /
+                                          sizeof(PieceType)};
+
   /// Total number of different piece types
   static constexpr size_t NUMBER_OF_TYPES{2};
 
@@ -59,7 +67,7 @@ public:
   }
 
   static Piece randomPiece() {
-    return Piece(Piece::PieceType(rand() % Piece::NUMBER_OF_TYPES));
+    return Piece(Piece::SPAWNABLE[rand() % Piece::SPAWNABLE_COUNT]);
   }
 };
 
