@@ -164,6 +164,13 @@ public:
       placeCurrentPiece();
     }
   }
+
+  void rotatePiece() {
+    switch (current_piece.ptype) {
+    case Block:
+      break;
+    }
+  }
 };
 
 ArduinoLEDMatrix matrix{};
