@@ -207,7 +207,8 @@ public:
         new_high_row = LMG::LED_MATRIX_HEIGHT - 1;
         new_low_row = LMG::LED_MATRIX_HEIGHT - 5;
       }
-      current_piece.area = LMG::Rect(new_low_row, new_high_row, new_col, new_col);
+      current_piece.area =
+          LMG::Rect(new_low_row, new_high_row, new_col, new_col);
       current_piece.ptype = Piece::PieceType::HorizontalBar;
       break;
     }
@@ -220,7 +221,8 @@ public:
         new_high_col = LMG::LED_MATRIX_WIDTH - 1;
         new_low_col = LMG::LED_MATRIX_WIDTH - 5;
       }
-      current_piece.area = LMG::Rect(new_row, new_row, new_low_col, new_high_col);
+      current_piece.area =
+          LMG::Rect(new_row, new_row, new_low_col, new_high_col);
       current_piece.ptype = Piece::PieceType::VerticalBar;
       break;
     }
@@ -230,6 +232,12 @@ public:
   void shiftPieceLeft() {
     if (current_piece.area.getLowRow() > 0) {
       current_piece.area.shiftRows(-1);
+    }
+  }
+
+  void shiftPieceRight() {
+    if (current_piece.area.getHighRow() < LMG::LED_MATRIX_HEIGHT - 1) {
+      current_piece.area.shiftRows(1);
     }
   }
 };
