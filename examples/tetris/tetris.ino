@@ -64,8 +64,9 @@ public:
       break;
     case PieceType::VerticalBar:
       ptype = PieceType::HorizontalBar;
-      [[fallthrough]] case PieceType::HorizontalBar
-          : area = LMG::Rect(2, 5, 11, 11);
+      [[fallthrough]];
+    case PieceType::HorizontalBar:
+      area = LMG::Rect(2, 5, 11, 11);
       break;
     }
   }
