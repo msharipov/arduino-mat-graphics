@@ -226,6 +226,12 @@ public:
     }
     }
   }
+
+  void shiftPieceLeft() {
+    if (current_piece.area.getLowRow() > 0) {
+      current_piece.area.shiftRows(-1);
+    }
+  }
 };
 
 ArduinoLEDMatrix matrix{};
