@@ -85,6 +85,12 @@ class GameState {
   /// Holds the current game time
   uint32_t current_tick{0};
 
+  /// Determines whether the game is in line-clearing state.
+  bool clearing_lines{false};
+
+  /// When clearing lines, determines which line to check next.
+  size_t line_to_check{0};
+
 public:
   GameState() { current_piece = Piece::randomPiece(); }
 
@@ -156,7 +162,7 @@ public:
     }
     }
     current_piece = Piece::randomPiece();
-    updateLines();
+    clearing_lines = true;
   }
 
   LMG::Frame drawPlaced() {
@@ -178,6 +184,18 @@ public:
     current_tick++;
     if (current_tick % TICKS_PER_DESCENT == 0) {
       tryDescend();
+    }
+    if (clearing_lines) {
+      if (line_to_check >= LMG::LED_MATRIX_WIDTH) {
+        clearing_lines = false;
+        line_to_check = 0;
+      } else {
+        if (isLineFull(line_to_check)) {
+          clearLine(line_to_check);
+        } else {
+          line_to_check++;
+        }
+      }
     }
     delay(GameState::MS_PER_TICK);
   }
@@ -243,7 +261,12 @@ public:
   }
 
   void clearLine(const size_t line) {
-    if (line >= LMG::LED_MATRIX_HEIGHT - 1) {
+    if (line > LMG::LED_MATRIX_HEIGHT - 1) {
+      return;
+    } else if (line == LMG::LED_MATRIX_HEIGHT - 1) {
+      for (size_t row = 0; row < LMG::LED_MATRIX_HEIGHT; row++) {
+        placed_pieces[row][line] = false;
+      }
       return;
     }
     for (size_t row = 0; row < LMG::LED_MATRIX_HEIGHT; row++) {
@@ -252,21 +275,18 @@ public:
     clearLine(line + 1);
   }
 
-  void updateLines() {
-    size_t line = LMG::LED_MATRIX_WIDTH - 1;
-    do {
-      line--;
-      bool full{true};
-      for (size_t row = 0; row < LMG::LED_MATRIX_HEIGHT; row++) {
-        if (!placed_pieces[row][line]) {
-          full = false;
-          break;
-        }
+  bool isLineFull(const size_t line) {
+    if (line >= LMG::LED_MATRIX_HEIGHT - 1) {
+      return false;
+    }
+    bool full{true};
+    for (size_t row = 0; row < LMG::LED_MATRIX_HEIGHT; row++) {
+      if (!placed_pieces[row][line]) {
+        full = false;
+        break;
       }
-      if (full) {
-        clearLine(line);
-      }
-    } while (line != 0);
+    }
+    return full;
   }
 };
 
