@@ -33,6 +33,7 @@ public:
     VerticalBar,
   };
 
+  /// These types can be spawned by randomPiece
   static constexpr PieceType SPAWNABLE[] = {
       PieceType::Block,
       PieceType::HorizontalBar,
