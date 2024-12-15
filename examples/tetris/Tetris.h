@@ -97,6 +97,9 @@ class GameState {
   /// Determines if the game is over.
   bool game_over{false};
 
+  /// Tracks the score.
+  uint16_t score{0};
+
 public:
   GameState() { current_piece = Piece::randomPiece(); }
 
@@ -202,6 +205,7 @@ public:
       } else {
         if (isLineFull(line_to_check)) {
           clearLine(line_to_check);
+          score++;
         } else {
           line_to_check++;
         }
@@ -308,4 +312,6 @@ public:
   }
 
   bool isGameOver() { return game_over; }
+
+  uint32_t getScore() { return score; }
 };
