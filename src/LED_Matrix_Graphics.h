@@ -302,5 +302,5 @@ extern const bool DIGITS_3x5[10][15];
  | ███ |   █ | ███ |  █  | █ █ |   █ |
  |   █ | ███ | ███ |  █  | ███ | ███ |
 */
-extern const bool DEFAULT_FONT_3_4[36][12];
+extern const bool DEFAULT_FONT_3x4[36][12];
 } // namespace LMG
