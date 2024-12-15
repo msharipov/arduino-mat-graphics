@@ -204,6 +204,8 @@ public:
     delay(GameState::MS_PER_TICK);
   }
 
+  /// Lowers the active piece, if possible. Otherwise, places the piece where
+  /// it currently is.
   void tryDescend() {
     if (canDescend()) {
       descend();
