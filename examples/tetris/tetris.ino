@@ -45,6 +45,11 @@ void setup() {
 
 void loop() {
   using LMG::Frame;
+  if (game.isGameOver()) {
+    Frame empty{};
+    matrix.loadFrame(empty.getData());
+    return;
+  }
   // Controls for piece rotation
   if (digitalRead(ROTATE_PIECE_BUTTON) == HIGH) {
     if (!rotate_button_pushed) {

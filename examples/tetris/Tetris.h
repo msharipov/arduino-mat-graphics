@@ -94,6 +94,9 @@ class GameState {
   /// When clearing lines, determines which line to check next.
   size_t line_to_check{0};
 
+  /// Determines if the game is over.
+  bool game_over{false};
+
 public:
   GameState() { current_piece = Piece::randomPiece(); }
 
@@ -185,6 +188,9 @@ public:
   }
 
   void nextTick() {
+    if (game_over) {
+      return;
+    }
     current_tick++;
     if (current_tick % TICKS_PER_DESCENT == 0) {
       tryDescend();
@@ -199,6 +205,12 @@ public:
         } else {
           line_to_check++;
         }
+      }
+    }
+    // Check if the game is over.
+    for (size_t row = 0; row < LMG::LED_MATRIX_HEIGHT; row++) {
+      if (placed_pieces[row][LMG::LED_MATRIX_WIDTH - 1]) {
+        game_over = true;
       }
     }
     delay(GameState::MS_PER_TICK);
@@ -294,4 +306,6 @@ public:
     }
     return full;
   }
+
+  bool isGameOver() { return game_over; }
 };
