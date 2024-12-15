@@ -268,7 +268,7 @@ public:
  | █ █ |  █  | █   |   █ |   █ |   █ | █ █ |  █  | █ █ |   █ |
  |  █  | ███ | ███ | ███ |   █ | ███ | ███ |  █  | ███ | ██  |
 */
-extern const bool DIGITS_35[10][15];
+extern const bool DIGITS_3x5[10][15];
 
 // 3-by-4 letters and digits
 /*

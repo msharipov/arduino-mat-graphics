@@ -48,11 +48,11 @@ void drawScore() {
   Frame score_screen{};
   const uint32_t score = game.getScore();
   const size_t ones = score % 10;
-  score_screen.drawSprite(LMG::DIGITS_35[ones], Rect(1, 5, 9, 11));
+  score_screen.drawSprite(LMG::DIGITS_3x5[ones], Rect(1, 5, 9, 11));
   const size_t tens = (score / 10) % 10;
-  score_screen.drawSprite(LMG::DIGITS_35[tens], Rect(1, 5, 5, 7));
+  score_screen.drawSprite(LMG::DIGITS_3x5[tens], Rect(1, 5, 5, 7));
   const size_t hundreds = (score / 100) % 10;
-  score_screen.drawSprite(LMG::DIGITS_35[hundreds], Rect(1, 5, 1, 3));
+  score_screen.drawSprite(LMG::DIGITS_3x5[hundreds], Rect(1, 5, 1, 3));
   matrix.loadFrame(score_screen.getData());
 }
 
