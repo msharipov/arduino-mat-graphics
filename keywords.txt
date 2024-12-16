@@ -7,6 +7,12 @@ Rect	KEYWORD1
 ##################################################
 # Functions
 ##################################################
+getLowRow KEYWORD2
+getLowCol KEYWORD2
+getHighRow KEYWORD2
+getHighCol KEYWORD2
+shiftRows KEYWORD2
+shiftColumns KEYWORD2
 getData	KEYWORD2
 setLED	KEYWORD2
 invertLED	KEYWORD2
@@ -17,5 +23,5 @@ drawSprite	KEYWORD2
 ##################################################
 # Constants
 ##################################################
-DIGITS_35	LITERAL1
-DEFAULT_FONT_3_4	LITERAL1
+DIGITS_3x5	LITERAL1
+DEFAULT_FONT_3x4	LITERAL1
