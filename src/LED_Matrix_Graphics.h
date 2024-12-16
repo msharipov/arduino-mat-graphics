@@ -132,7 +132,8 @@ public:
    * shifted into the negative columns, sets the lowest column to 0 instead.
    * Similarly prevents overflow if the shift value is too high.
    */
-  void shiftColumns(int8_t shift);};
+  void shiftColumns(int8_t shift);
+};
 
 /// Stores the state of the LED matrix.
 class Frame {
