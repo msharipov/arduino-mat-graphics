@@ -26,7 +26,7 @@
 
 namespace LMG {
 
-Rect::Rect(uint8_t row_a, uint8_t row_b, uint8_t col_a, uint8_t col_b)
+Rect::Rect(int8_t row_a, int8_t row_b, int8_t col_a, int8_t col_b)
     : low_row(row_a), high_row(row_a), low_col(col_a), high_col(col_a) {
 
   if (row_b > row_a) {
@@ -56,48 +56,22 @@ std::optional<Rect> Rect::operator&(const Rect &other) {
       std::max(low_col, other.low_col), std::min(high_col, other.high_col)};
 }
 
-uint8_t Rect::getLowRow() { return low_row; }
+int8_t Rect::getLowRow() { return low_row; }
 
-uint8_t Rect::getLowCol() { return low_col; }
+int8_t Rect::getLowCol() { return low_col; }
 
-uint8_t Rect::getHighRow() { return high_row; }
+int8_t Rect::getHighRow() { return high_row; }
 
-uint8_t Rect::getHighCol() { return high_col; }
+int8_t Rect::getHighCol() { return high_col; }
 
 void Rect::shiftRows(int8_t shift) {
-  if (shift < 0) {
-    uint8_t unsigned_shift = static_cast<uint8_t>(-shift);
-    if (unsigned_shift > low_row) {
-      unsigned_shift = low_row;
-    }
-    low_row -= unsigned_shift;
-    high_row -= unsigned_shift;
-  } else {
-    uint8_t unsigned_shift = static_cast<uint8_t>(shift);
-    if (255 - high_row < unsigned_shift) {
-      unsigned_shift = 255 - high_row;
-    }
-    low_row += unsigned_shift;
-    high_row += unsigned_shift;
-  }
+  low_row += shift;
+  high_row += shift;
 }
 
 void Rect::shiftColumns(int8_t shift) {
-  if (shift < 0) {
-    uint8_t unsigned_shift = static_cast<uint8_t>(-shift);
-    if (unsigned_shift > low_col) {
-      unsigned_shift = low_col;
-    }
-    low_col -= unsigned_shift;
-    high_col -= unsigned_shift;
-  } else {
-    uint8_t unsigned_shift = static_cast<uint8_t>(shift);
-    if (255 - high_col < unsigned_shift) {
-      unsigned_shift = 255 - high_col;
-    }
-    low_col += unsigned_shift;
-    high_col += unsigned_shift;
-  }
+  low_col += shift;
+  high_col += shift;
 }
 
 const uint32_t *Frame::getData() { return data.data(); }
@@ -121,26 +95,26 @@ Frame Frame::operator&(const Frame &other) {
 Frame::operator bool() { return data[0] || data[1] || data[2]; }
 
 void Frame::fillRect(const Rect &area, const bool bit) {
-  for (uint8_t col = area.low_col; col <= area.high_col; col++) {
-    for (uint8_t row = area.low_row; row <= area.high_row; row++) {
+  for (int8_t col = area.low_col; col <= area.high_col; col++) {
+    for (int8_t row = area.low_row; row <= area.high_row; row++) {
       setLED(row, col, bit);
     }
   }
 }
 
 void Frame::invertRect(const Rect &area) {
-  for (uint8_t col = area.low_col; col <= area.high_col; col++) {
-    for (uint8_t row = area.low_row; row <= area.high_row; row++) {
+  for (int8_t col = area.low_col; col <= area.high_col; col++) {
+    for (int8_t row = area.low_row; row <= area.high_row; row++) {
       invertLED(row, col);
     }
   }
 }
 
 void Frame::drawSprite(const bool *data, const Rect &area) {
-  const uint8_t width = area.high_col - area.low_col + 1;
-  const uint8_t height = area.high_row - area.low_row + 1;
-  for (uint8_t sprite_col = 0; sprite_col < width; sprite_col++) {
-    for (uint8_t sprite_row = 0; sprite_row < height; sprite_row++) {
+  const int8_t width = area.high_col - area.low_col + 1;
+  const int8_t height = area.high_row - area.low_row + 1;
+  for (int8_t sprite_col = 0; sprite_col < width; sprite_col++) {
+    for (int8_t sprite_row = 0; sprite_row < height; sprite_row++) {
       setLED(area.low_row + sprite_row, area.low_col + sprite_col,
              data[sprite_row * width + sprite_col]);
     }

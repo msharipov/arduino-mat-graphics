@@ -52,18 +52,18 @@
 namespace LMG {
 
 /// Number of rows in the LED matrix.
-constexpr uint8_t LED_MATRIX_HEIGHT{8};
+constexpr int8_t LED_MATRIX_HEIGHT{8};
 
 /// Number of columns in the LED matrix.
-constexpr uint8_t LED_MATRIX_WIDTH{12};
+constexpr int8_t LED_MATRIX_WIDTH{12};
 
 /// Represents a rectangular subregion of the LED matrix.
 class Rect {
   friend class Frame;
-  uint8_t low_row;
-  uint8_t high_row;
-  uint8_t low_col;
-  uint8_t high_col;
+  int8_t low_row;
+  int8_t high_row;
+  int8_t low_col;
+  int8_t high_col;
 
   /// Default constructor is private to prevent invalid rectangles
   Rect() {}
@@ -79,7 +79,7 @@ public:
    * The ranges are inclusive. For example, `Rect(5, 2, 3, 7)` contains all
    * points for which 2 <= row <= 5 and 3 <= column <= 7.
    */
-  Rect(uint8_t row_a, uint8_t row_b, uint8_t col_a, uint8_t col_b);
+  Rect(int8_t row_a, int8_t row_b, int8_t col_a, int8_t col_b);
 
   /// Returns the intersection of two rectangles.
   /**
@@ -94,25 +94,25 @@ public:
   /**
    * @returns The lowest row in the rectangle.
    */
-  uint8_t getLowRow();
+  int8_t getLowRow();
 
   /// Returns the lower of the two bounding columns.
   /**
    * @returns The lowest column in the rectangle.
    */
-  uint8_t getLowCol();
+  int8_t getLowCol();
 
   /// Returns the higher of the two bounding rows.
   /**
    * @returns The highest row in the rectangle.
    */
-  uint8_t getHighRow();
+  int8_t getHighRow();
 
   /// Returns the higher of the two bounding columns.
   /**
    * @returns The highest column in the rectangle.
    */
-  uint8_t getHighCol();
+  int8_t getHighCol();
 
   /// Shifts the rectangle across rows.
   /**
@@ -185,17 +185,19 @@ public:
    *
    * If the LED position is out of bounds, this function does nothing.
    */
-  void inline setLED(const uint8_t row, const uint8_t col, const bool bit) {
-    if (row < LED_MATRIX_HEIGHT && col < LED_MATRIX_WIDTH) {
+  void inline setLED(const int8_t row, const int8_t col, const bool bit) {
+    const bool valid_row = row < LED_MATRIX_HEIGHT && row >= 0;
+    const bool valid_col = col < LED_MATRIX_WIDTH && col >= 0;
+    if (valid_row && valid_col) {
       constexpr uint32_t TOP_BIT = 1L << 31;
-      const uint8_t pos = row * LED_MATRIX_WIDTH + col;
+      const int8_t pos = row * LED_MATRIX_WIDTH + col;
 
       // Each part of the data array has 32 bits, so we divide by 2^5 to
       // determine which part of the array to update.
-      const uint8_t data_index = pos >> 5;
+      const int8_t data_index = pos >> 5;
 
       // The remainder determines which bit should be updated.
-      const uint8_t rem = pos % 32;
+      const int8_t rem = pos % 32;
 
       if (bit) {
         data[data_index] |= (TOP_BIT >> rem);
@@ -212,17 +214,19 @@ public:
    *
    * If the LED position is out of bounds, this function does nothing.
    */
-  void inline invertLED(const uint8_t row, const uint8_t col) {
-    if (row < LED_MATRIX_HEIGHT && col < LED_MATRIX_WIDTH) {
+  void inline invertLED(const int8_t row, const int8_t col) {
+    const bool valid_row = row < LED_MATRIX_HEIGHT && row >= 0;
+    const bool valid_col = col < LED_MATRIX_WIDTH && col >= 0;
+    if (valid_row && valid_col) {
       constexpr uint32_t TOP_BIT = 1L << 31;
-      const uint8_t pos = row * LED_MATRIX_WIDTH + col;
+      const int8_t pos = row * LED_MATRIX_WIDTH + col;
 
       // Each part of the data array has 32 bits, so we divide by 2^5 = 32 to
       // determine which part of the array to update.
-      const uint8_t data_index = pos >> 5;
+      const int8_t data_index = pos >> 5;
 
       // The remainder determines which bit should be updated.
-      const uint8_t rem = pos % 32;
+      const int8_t rem = pos % 32;
 
       data[data_index] ^= (TOP_BIT >> rem);
     }
