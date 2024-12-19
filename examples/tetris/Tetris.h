@@ -121,20 +121,20 @@ public:
     }
     switch (current_piece.ptype) {
     case Piece::PieceType::Block: {
-      const uint8_t col = current_piece.area.getLowCol() - 1;
-      const uint8_t low_row = current_piece.area.getLowRow();
+      const int8_t col = current_piece.area.getLowCol() - 1;
+      const int8_t low_row = current_piece.area.getLowRow();
       return !(placed_pieces[low_row][col] || placed_pieces[low_row + 1][col]);
     }
     case Piece::PieceType::HorizontalBar: {
-      const uint8_t col = current_piece.area.getLowCol() - 1;
-      const uint8_t low_row = current_piece.area.getLowRow();
+      const int8_t col = current_piece.area.getLowCol() - 1;
+      const int8_t low_row = current_piece.area.getLowRow();
       return !(placed_pieces[low_row][col] || placed_pieces[low_row + 1][col] ||
                placed_pieces[low_row + 2][col] ||
                placed_pieces[low_row + 3][col]);
     }
     case Piece::PieceType::VerticalBar: {
-      const uint8_t row = current_piece.area.getLowRow();
-      const uint8_t col = current_piece.area.getLowCol() - 1;
+      const int8_t row = current_piece.area.getLowRow();
+      const int8_t col = current_piece.area.getLowCol() - 1;
       return !placed_pieces[row][col];
     }
     }
@@ -146,8 +146,8 @@ public:
   bool placeCurrentPiece() {
     switch (current_piece.ptype) {
     case Piece::PieceType::Block: {
-      const uint8_t low_col = current_piece.area.getLowCol();
-      const uint8_t low_row = current_piece.area.getLowRow();
+      const int8_t low_col = current_piece.area.getLowCol();
+      const int8_t low_row = current_piece.area.getLowRow();
       placed_pieces[low_row][low_col] = true;
       placed_pieces[low_row][low_col + 1] = true;
       placed_pieces[low_row + 1][low_col] = true;
@@ -155,17 +155,17 @@ public:
       break;
     }
     case Piece::PieceType::HorizontalBar: {
-      const uint8_t col = current_piece.area.getLowCol();
-      const uint8_t low_row = current_piece.area.getLowRow();
-      for (uint8_t add_row = 0; add_row < 4; add_row++) {
+      const int8_t col = current_piece.area.getLowCol();
+      const int8_t low_row = current_piece.area.getLowRow();
+      for (int8_t add_row = 0; add_row < 4; add_row++) {
         placed_pieces[low_row + add_row][col] = true;
       }
       break;
     }
     case Piece::PieceType::VerticalBar: {
-      const uint8_t low_col = current_piece.area.getLowCol();
-      const uint8_t row = current_piece.area.getLowRow();
-      for (uint8_t add_col = 0; add_col < 4; add_col++) {
+      const int8_t low_col = current_piece.area.getLowCol();
+      const int8_t row = current_piece.area.getLowRow();
+      for (int8_t add_col = 0; add_col < 4; add_col++) {
         placed_pieces[row][low_col + add_col] = true;
       }
       break;
@@ -235,15 +235,15 @@ public:
     case Piece::PieceType::Block:
       break;
     case Piece::PieceType::VerticalBar: {
-      const uint8_t new_col = current_piece.area.getLowCol();
-      uint8_t new_low_row = current_piece.area.getLowRow();
+      const int8_t new_col = current_piece.area.getLowCol();
+      int8_t new_low_row = current_piece.area.getLowRow();
       // Adjust the new position so that it fits on the screen
       if (new_low_row < 2) {
         new_low_row = 0;
       } else {
         new_low_row -= 2;
       }
-      uint8_t new_high_row = new_low_row + 4;
+      int8_t new_high_row = new_low_row + 4;
       if (new_high_row >= LMG::LED_MATRIX_HEIGHT) {
         new_high_row = LMG::LED_MATRIX_HEIGHT - 1;
         new_low_row = LMG::LED_MATRIX_HEIGHT - 5;
@@ -254,9 +254,9 @@ public:
       break;
     }
     case Piece::PieceType::HorizontalBar: {
-      const uint8_t new_row = current_piece.area.getLowRow() + 2;
-      uint8_t new_low_col = current_piece.area.getLowCol();
-      uint8_t new_high_col = new_low_col + 4;
+      const int8_t new_row = current_piece.area.getLowRow() + 2;
+      int8_t new_low_col = current_piece.area.getLowCol();
+      int8_t new_high_col = new_low_col + 4;
       // Adjust the new position so that it fits on the screen
       if (new_high_col >= LMG::LED_MATRIX_WIDTH) {
         new_high_col = LMG::LED_MATRIX_WIDTH - 1;
