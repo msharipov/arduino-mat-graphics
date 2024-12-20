@@ -119,25 +119,22 @@ public:
     if (current_piece.area.getLowCol() == 0) {
       return false;
     }
-    switch (current_piece.ptype) {
-    case Piece::PieceType::Block: {
-      const int8_t col = current_piece.area.getLowCol() - 1;
-      const int8_t low_row = current_piece.area.getLowRow();
-      return !(placed_pieces[low_row][col] || placed_pieces[low_row + 1][col]);
+    const int8_t high_row = current_piece.area.getHighRow();
+    const int8_t high_col = current_piece.area.getHighCol();
+    const int8_t width = high_row - current_piece.area.getLowRow();
+    for (int8_t row = current_piece.area.getLowRow(); row <= high_row; row++) {
+      for (int8_t col = current_piece.area.getLowCol(); col <= high_col;
+           col++) {
+        const bool part_of_active_piece =
+            Piece::SPRITES[static_cast<size_t>(current_piece.ptype)]
+                          [row * width + col];
+        const bool space_below_full = placed_pieces[row][col - 1];
+        if (part_of_active_piece && space_below_full) {
+          return false;
+        }
+      }
     }
-    case Piece::PieceType::HorizontalBar: {
-      const int8_t col = current_piece.area.getLowCol() - 1;
-      const int8_t low_row = current_piece.area.getLowRow();
-      return !(placed_pieces[low_row][col] || placed_pieces[low_row + 1][col] ||
-               placed_pieces[low_row + 2][col] ||
-               placed_pieces[low_row + 3][col]);
-    }
-    case Piece::PieceType::VerticalBar: {
-      const int8_t row = current_piece.area.getLowRow();
-      const int8_t col = current_piece.area.getLowCol() - 1;
-      return !placed_pieces[row][col];
-    }
-    }
+    return true;
   }
 
   /// Lowers the current active piece by one line.
