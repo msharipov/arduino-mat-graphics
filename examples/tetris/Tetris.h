@@ -120,15 +120,18 @@ public:
       return false;
     }
     const int8_t high_row = current_piece.area.getHighRow();
+    const int8_t low_row = current_piece.area.getLowRow();
     const int8_t high_col = current_piece.area.getHighCol();
-    const int8_t width = high_row - current_piece.area.getLowRow();
-    for (int8_t row = current_piece.area.getLowRow(); row <= high_row; row++) {
-      for (int8_t col = current_piece.area.getLowCol(); col <= high_col;
-           col++) {
+    const int8_t low_col = current_piece.area.getLowCol();
+    const int8_t width = high_col - low_col + 1;
+    const int8_t height = high_row - low_row + 1;
+    for (int8_t add_row = 0; add_row < height; add_row++) {
+      for (int8_t add_col = 0; add_col < width; add_col++) {
         const bool part_of_active_piece =
             Piece::SPRITES[static_cast<size_t>(current_piece.ptype)]
-                          [row * width + col];
-        const bool space_below_full = placed_pieces[row][col - 1];
+                          [add_row * width + add_col];
+        const bool space_below_full =
+            placed_pieces[low_row + add_row][low_col + add_col - 1];
         if (part_of_active_piece && space_below_full) {
           return false;
         }
