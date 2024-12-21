@@ -144,32 +144,21 @@ public:
   void descend() { current_piece.area.shiftColumns(-1); }
 
   bool placeCurrentPiece() {
-    switch (current_piece.ptype) {
-    case Piece::PieceType::Block: {
-      const int8_t low_col = current_piece.area.getLowCol();
-      const int8_t low_row = current_piece.area.getLowRow();
-      placed_pieces[low_row][low_col] = true;
-      placed_pieces[low_row][low_col + 1] = true;
-      placed_pieces[low_row + 1][low_col] = true;
-      placed_pieces[low_row + 1][low_col + 1] = true;
-      break;
-    }
-    case Piece::PieceType::HorizontalBar: {
-      const int8_t col = current_piece.area.getLowCol();
-      const int8_t low_row = current_piece.area.getLowRow();
-      for (int8_t add_row = 0; add_row < 4; add_row++) {
-        placed_pieces[low_row + add_row][col] = true;
+    const int8_t high_row = current_piece.area.getHighRow();
+    const int8_t low_row = current_piece.area.getLowRow();
+    const int8_t high_col = current_piece.area.getHighCol();
+    const int8_t low_col = current_piece.area.getLowCol();
+    const int8_t width = high_col - low_col + 1;
+    const int8_t height = high_row - low_row + 1;
+    for (int8_t add_row = 0; add_row < height; add_row++) {
+      for (int8_t add_col = 0; add_col < width; add_col++) {
+        const bool part_of_active_piece =
+            Piece::SPRITES[static_cast<size_t>(current_piece.ptype)]
+                          [add_row * width + add_col];
+        if (part_of_active_piece) {
+          placed_pieces[low_row + add_row][low_col + add_col] = true;
+        }
       }
-      break;
-    }
-    case Piece::PieceType::VerticalBar: {
-      const int8_t low_col = current_piece.area.getLowCol();
-      const int8_t row = current_piece.area.getLowRow();
-      for (int8_t add_col = 0; add_col < 4; add_col++) {
-        placed_pieces[row][low_col + add_col] = true;
-      }
-      break;
-    }
     }
     current_piece = Piece::randomPiece();
     clearing_lines = true;
