@@ -259,12 +259,14 @@ public:
     }
   }
 
+  /// Shifts the piece to the left (higher row)
   void shiftPieceLeft() {
     if (current_piece.area.getLowRow() > 0) {
       current_piece.area.shiftRows(-1);
     }
   }
 
+  /// Shifts the piece to the right (lower row)
   void shiftPieceRight() {
     if (current_piece.area.getHighRow() < LMG::LED_MATRIX_HEIGHT - 1) {
       current_piece.area.shiftRows(1);
