@@ -279,6 +279,27 @@ public:
     return true;
   }
 
+  /// Check is the active piece can shift to the right
+  bool canShiftRight() {
+    const int8_t high_row = current_piece.area.getHighRow();
+    if (high_row >= LMG::LED_MATRIX_HEIGHT - 1) {
+      return false;
+    }
+    const int8_t low_col = current_piece.area.getLowCol();
+    const int8_t width = current_piece.area.getHighCol() - low_col + 1;
+    for (int8_t add_col = 0; add_col < width; add_col++) {
+      const bool part_of_active_piece =
+          Piece::SPRITES[static_cast<size_t>(current_piece.ptype)]
+                        [high_row * width + add_col];
+      const bool right_is_occupied =
+          placed_pieces[high_row + 1][low_col + add_col];
+      if (part_of_active_piece && right_is_occupied) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   /// Shifts the piece to the left (lower row)
   void shiftPieceLeft() {
     if (canShiftLeft()) {
@@ -288,7 +309,7 @@ public:
 
   /// Shifts the piece to the right (higher row)
   void shiftPieceRight() {
-    if (current_piece.area.getHighRow() < LMG::LED_MATRIX_HEIGHT - 1) {
+    if (canShiftRight()) {
       current_piece.area.shiftRows(1);
     }
   }
