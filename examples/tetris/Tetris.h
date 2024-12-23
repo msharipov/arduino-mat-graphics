@@ -248,7 +248,7 @@ public:
     int8_t new_high_row = new_low_row + new_height - 1;
     if (new_high_row >= LMG::LED_MATRIX_HEIGHT - 1) {
       new_high_row = LMG::LED_MATRIX_HEIGHT - 1;
-      new_low_row = new_high_row + 1;
+      new_low_row = new_high_row - new_height + 1;
     }
     const int8_t new_high_col = low_col + new_width - 1;
     current_piece.ptype = current_piece.nextVariant();
