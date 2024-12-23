@@ -232,43 +232,28 @@ public:
   }
 
   void rotatePiece() {
-    switch (current_piece.ptype) {
-    case Piece::PieceType::Block:
-      break;
-    case Piece::PieceType::VerticalBar: {
-      const int8_t new_col = current_piece.area.getLowCol();
-      int8_t new_low_row = current_piece.area.getLowRow();
-      // Adjust the new position so that it fits on the screen
-      if (new_low_row < 2) {
-        new_low_row = 0;
-      } else {
-        new_low_row -= 2;
-      }
-      int8_t new_high_row = new_low_row + 4;
-      if (new_high_row >= LMG::LED_MATRIX_HEIGHT) {
-        new_high_row = LMG::LED_MATRIX_HEIGHT - 1;
-        new_low_row = LMG::LED_MATRIX_HEIGHT - 5;
-      }
-      current_piece.area =
-          LMG::Rect(new_low_row, new_high_row, new_col, new_col);
-      current_piece.ptype = Piece::PieceType::HorizontalBar;
-      break;
+    const Piece::PieceType next_type = current_piece.nextVariant();
+    const int8_t low_row = current_piece.area.getLowRow();
+    const int8_t high_row = current_piece.area.getHighRow();
+    const int8_t height = high_row - low_row + 1;
+    const int8_t low_col = current_piece.area.getLowCol();
+    const int8_t high_col = current_piece.area.getHighCol();
+    const int8_t width = high_col - low_col + 1;
+    const int8_t new_width = height;
+    const int8_t new_height = width;
+    int8_t new_low_row = (low_row + high_row) / 2 - (new_height - 1) / 2;
+    if (new_low_row < 0) {
+      new_low_row = 0;
     }
-    case Piece::PieceType::HorizontalBar: {
-      const int8_t new_row = current_piece.area.getLowRow() + 2;
-      int8_t new_low_col = current_piece.area.getLowCol();
-      int8_t new_high_col = new_low_col + 4;
-      // Adjust the new position so that it fits on the screen
-      if (new_high_col >= LMG::LED_MATRIX_WIDTH) {
-        new_high_col = LMG::LED_MATRIX_WIDTH - 1;
-        new_low_col = LMG::LED_MATRIX_WIDTH - 5;
-      }
-      current_piece.area =
-          LMG::Rect(new_row, new_row, new_low_col, new_high_col);
-      current_piece.ptype = Piece::PieceType::VerticalBar;
-      break;
+    int8_t new_high_row = new_low_row + new_height - 1;
+    if (new_high_row >= LMG::LED_MATRIX_HEIGHT - 1) {
+      new_high_row = LMG::LED_MATRIX_HEIGHT - 1;
+      new_low_row = new_high_row + 1;
     }
-    }
+    const int8_t new_high_col = low_col + new_width - 1;
+    current_piece.ptype = current_piece.nextVariant();
+    current_piece.area =
+        LMG::Rect(new_low_row, new_high_row, low_col, new_high_col);
   }
 
   /// Check is the active piece can shift to the left
