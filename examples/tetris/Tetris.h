@@ -279,14 +279,14 @@ public:
     return true;
   }
 
-  /// Shifts the piece to the left (higher row)
+  /// Shifts the piece to the left (lower row)
   void shiftPieceLeft() {
     if (canShiftLeft()) {
       current_piece.area.shiftRows(-1);
     }
   }
 
-  /// Shifts the piece to the right (lower row)
+  /// Shifts the piece to the right (higher row)
   void shiftPieceRight() {
     if (current_piece.area.getHighRow() < LMG::LED_MATRIX_HEIGHT - 1) {
       current_piece.area.shiftRows(1);
