@@ -76,6 +76,18 @@ public:
   static Piece randomPiece() {
     return Piece(Piece::SPAWNABLE[rand() % Piece::SPAWNABLE_COUNT]);
   }
+
+  /// Returns the type that this piece turns into when rotated
+  PieceType nextVariant() {
+    switch (ptype) {
+    case PieceType::Block:
+      return PieceType::Block;
+    case PieceType::HorizontalBar:
+      return PieceType::VerticalBar;
+    case PieceType::VerticalBar:
+      return PieceType::HorizontalBar;
+    }
+  }
 };
 
 class GameState {
