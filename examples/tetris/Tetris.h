@@ -156,7 +156,8 @@ public:
   /// Lowers the current active piece by one line.
   void descend() { current_piece.area.shiftColumns(-1); }
 
-  bool placeCurrentPiece() {
+
+  void placeCurrentPiece() {
     const int8_t high_row = current_piece.area.getHighRow();
     const int8_t low_row = current_piece.area.getLowRow();
     const int8_t high_col = current_piece.area.getHighCol();
