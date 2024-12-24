@@ -156,7 +156,10 @@ public:
   /// Lowers the current active piece by one line.
   void descend() { current_piece.area.shiftColumns(-1); }
 
-
+  /// Places the active piece where it currently is on the screen.
+  /*
+   *  Activates line clearing. Spawns the next piece at the top of the screen.
+   */
   void placeCurrentPiece() {
     const int8_t high_row = current_piece.area.getHighRow();
     const int8_t low_row = current_piece.area.getLowRow();
