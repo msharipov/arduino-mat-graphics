@@ -181,6 +181,7 @@ public:
     clearing_lines = true;
   }
 
+  /// Draws the placed pieces to a Frame.
   LMG::Frame drawPlaced() {
     LMG::Frame placed{};
     placed.drawSprite(
@@ -189,6 +190,7 @@ public:
     return placed;
   }
 
+  /// Draws the active piece to a Frame.
   LMG::Frame drawActive() {
     LMG::Frame active{};
     active.drawSprite(Piece::SPRITES[static_cast<int32_t>(current_piece.ptype)],
