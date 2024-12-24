@@ -241,6 +241,10 @@ public:
     const int8_t width = high_col - low_col + 1;
     const int8_t new_width = height;
     const int8_t new_height = width;
+    const int8_t new_high_col = low_col + new_width - 1;
+    if (new_high_col > LMG::LED_MATRIX_WIDTH - 1) {
+      return; // Do not rotate if the top would be out of bounds.
+    }
     int8_t new_low_row = (low_row + high_row) / 2 - (new_height - 1) / 2;
     if (new_low_row < 0) {
       new_low_row = 0;
@@ -250,7 +254,6 @@ public:
       new_high_row = LMG::LED_MATRIX_HEIGHT - 1;
       new_low_row = new_high_row - new_height + 1;
     }
-    const int8_t new_high_col = low_col + new_width - 1;
     const Piece::PieceType next_ptype = current_piece.nextVariant();
     const LMG::Rect new_area =
         LMG::Rect(new_low_row, new_high_row, low_col, new_high_col);
@@ -262,7 +265,7 @@ public:
         const bool space_occupied =
             placed_pieces[new_low_row + add_row][low_col + add_col];
         if (part_of_rotated_piece && space_occupied) {
-          return; // Do nothing if rotation is impossible
+          return; // Do nothing if rotation is impossible.
         }
       }
     }
