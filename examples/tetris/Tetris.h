@@ -198,6 +198,10 @@ public:
     return active;
   }
 
+  /// Updates the game state by one tick.
+  /*
+   *  If the game is in line clearing mode, clears a single line.
+   */
   void nextTick() {
     if (game_over) {
       return;
