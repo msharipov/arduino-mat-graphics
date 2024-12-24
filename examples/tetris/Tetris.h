@@ -73,6 +73,7 @@ public:
     }
   }
 
+  /// Places a random piece from SPAWNABLE at the top of the screen
   static Piece randomPiece() {
     return Piece(Piece::SPAWNABLE[rand() % Piece::SPAWNABLE_COUNT]);
   }
