@@ -251,9 +251,24 @@ public:
       new_low_row = new_high_row - new_height + 1;
     }
     const int8_t new_high_col = low_col + new_width - 1;
-    current_piece.ptype = current_piece.nextVariant();
-    current_piece.area =
+    const Piece::PieceType next_ptype = current_piece.nextVariant();
+    const LMG::Rect new_area =
         LMG::Rect(new_low_row, new_high_row, low_col, new_high_col);
+    for (int8_t add_row = 0; add_row < new_height; add_row++) {
+      for (int8_t add_col = 0; add_col < new_width; add_col++) {
+        const bool part_of_rotated_piece =
+            Piece::SPRITES[static_cast<size_t>(next_ptype)]
+                          [add_row * new_width + add_col];
+        const bool space_occupied =
+            placed_pieces[new_low_row + add_row][low_col + add_col];
+        if (part_of_rotated_piece && space_occupied) {
+          return; // Do nothing if rotation is impossible
+        }
+      }
+    }
+    // If there are no conflicts, update the active piece.
+    current_piece.ptype = next_ptype;
+    current_piece.area = new_area;
   }
 
   /// Check is the active piece can shift to the left
