@@ -358,6 +358,7 @@ public:
     clearLine(line + 1);
   }
 
+  /// Checks if all spaces in a line are occupied.
   bool isLineFull(const size_t line) {
     if (line >= LMG::LED_MATRIX_HEIGHT - 1) {
       return false;
