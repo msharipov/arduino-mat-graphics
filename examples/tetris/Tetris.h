@@ -32,21 +32,23 @@ public:
     Block,
     HorizontalBar,
     VerticalBar,
+    HorizontalZigZag,
+    VerticalZigZag,
   };
 
   /// These types can be spawned by randomPiece
   static constexpr PieceType SPAWNABLE[] = {
-      PieceType::Block,
-      PieceType::HorizontalBar,
-  };
+      PieceType::Block, PieceType::HorizontalBar, PieceType::HorizontalZigZag};
 
   static constexpr size_t SPAWNABLE_COUNT{sizeof(SPAWNABLE) /
                                           sizeof(PieceType)};
 
   static constexpr bool SPRITES[][6] = {
-      {true, true, true, true}, // Block
-      {true, true, true, true}, // HorizontalBar
-      {true, true, true, true}, // VerticalBar
+      {true, true, true, true},               // Block
+      {true, true, true, true},               // HorizontalBar
+      {true, true, true, true},               // VerticalBar
+      {false, true, true, true, true, false}, // HorizontalZigZag
+      {true, true, false, false, true, true}, // VerticalZigZag
   };
 
 private:
@@ -70,6 +72,11 @@ public:
     case PieceType::HorizontalBar:
       area = LMG::Rect(2, 5, 11, 11);
       break;
+    case PieceType::VerticalZigZag:
+      ptype = PieceType::HorizontalZigZag;
+      [[fallthrough]];
+    case PieceType::HorizontalZigZag:
+      area = LMG::Rect(2, 4, 10, 11);
     }
   }
 
@@ -87,6 +94,10 @@ public:
       return PieceType::VerticalBar;
     case PieceType::VerticalBar:
       return PieceType::HorizontalBar;
+    case PieceType::VerticalZigZag:
+      return PieceType::HorizontalZigZag;
+    case PieceType::HorizontalZigZag:
+      return PieceType::VerticalZigZag;
     }
   }
 };
