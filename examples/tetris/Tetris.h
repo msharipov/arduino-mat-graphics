@@ -206,10 +206,6 @@ public:
     if (game_over) {
       return;
     }
-    current_tick++;
-    if (current_tick % TICKS_PER_DESCENT == 0) {
-      tryDescend();
-    }
     if (clearing_lines) {
       if (line_to_check >= LMG::LED_MATRIX_WIDTH) {
         clearing_lines = false;
@@ -221,6 +217,11 @@ public:
         } else {
           line_to_check++;
         }
+      }
+    } else {
+      current_tick++;
+      if (current_tick % TICKS_PER_DESCENT == 0) {
+        tryDescend();
       }
     }
     // Check if the game is over.
