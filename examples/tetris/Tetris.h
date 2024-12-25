@@ -342,6 +342,7 @@ public:
     }
   }
 
+  /// Clears all blocks in a line and shifts the all higher lines down.
   void clearLine(const size_t line) {
     if (line > LMG::LED_MATRIX_HEIGHT - 1) {
       return;
