@@ -243,6 +243,7 @@ public:
     }
   }
 
+  /// Attempts to rotate the active piece clockwise.
   void rotatePiece() {
     const Piece::PieceType next_type = current_piece.nextVariant();
     const int8_t low_row = current_piece.area.getLowRow();
