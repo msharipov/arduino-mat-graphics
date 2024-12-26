@@ -432,7 +432,7 @@ public:
   void clearLine(const size_t line) {
     if (line > LMG::LED_MATRIX_WIDTH - 1) {
       return;
-    } else if (line == LMG::LED_MATRIX_HEIGHT - 1) {
+    } else if (line == LMG::LED_MATRIX_WIDTH - 1) {
       for (size_t row = 0; row < LMG::LED_MATRIX_HEIGHT; row++) {
         placed_pieces[row][line] = false;
       }
@@ -446,7 +446,7 @@ public:
 
   /// Checks if all spaces in a line are occupied.
   bool isLineFull(const size_t line) {
-    if (line >= LMG::LED_MATRIX_HEIGHT - 1) {
+    if (line >= LMG::LED_MATRIX_WIDTH - 1) {
       return false;
     }
     bool full{true};
