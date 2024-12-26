@@ -34,11 +34,14 @@ public:
     VerticalBar,
     HorizontalZigZag,
     VerticalZigZag,
+    HorizontalZigZagMirror,
+    VerticalZigZagMirror,
   };
 
   /// These types can be spawned by randomPiece
   static constexpr PieceType SPAWNABLE[] = {
-      PieceType::Block, PieceType::HorizontalBar, PieceType::HorizontalZigZag};
+      PieceType::Block, PieceType::HorizontalBar, PieceType::HorizontalZigZag,
+      PieceType::HorizontalZigZagMirror};
 
   static constexpr size_t SPAWNABLE_COUNT{sizeof(SPAWNABLE) /
                                           sizeof(PieceType)};
@@ -49,6 +52,8 @@ public:
       {true, true, true, true},               // VerticalBar
       {false, true, true, true, true, false}, // HorizontalZigZag
       {true, true, false, false, true, true}, // VerticalZigZag
+      {true, false, true, true, false, true}, // HorizontalZigZagMirror
+      {false, true, true, true, true, false}, // VerticalZigZagMirror
   };
 
 private:
@@ -77,6 +82,13 @@ public:
       [[fallthrough]];
     case PieceType::HorizontalZigZag:
       area = LMG::Rect(2, 4, 10, 11);
+      break;
+    case PieceType::VerticalZigZagMirror:
+      ptype = PieceType::HorizontalZigZagMirror;
+      [[fallthrough]];
+    case PieceType::HorizontalZigZagMirror:
+      area = LMG::Rect(2, 4, 10, 11);
+      break;
     }
   }
 
@@ -98,6 +110,10 @@ public:
       return PieceType::HorizontalZigZag;
     case PieceType::HorizontalZigZag:
       return PieceType::VerticalZigZag;
+    case PieceType::VerticalZigZagMirror:
+      return PieceType::HorizontalZigZagMirror;
+    case PieceType::HorizontalZigZagMirror:
+      return PieceType::VerticalZigZagMirror;
     }
   }
 };
