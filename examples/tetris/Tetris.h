@@ -36,12 +36,19 @@ public:
     VerticalZigZag,
     HorizontalZigZagMirror,
     VerticalZigZagMirror,
+    UpT,
+    RightT,
+    DownT,
+    LeftT,
   };
 
   /// These types can be spawned by randomPiece
-  static constexpr PieceType SPAWNABLE[] = {
-      PieceType::Block, PieceType::HorizontalBar, PieceType::HorizontalZigZag,
-      PieceType::HorizontalZigZagMirror};
+  static constexpr PieceType SPAWNABLE[] = {PieceType::Block,
+                                            PieceType::HorizontalBar,
+                                            PieceType::HorizontalZigZag,
+                                            PieceType::HorizontalZigZagMirror,
+                                            PieceType::UpT,
+                                            PieceType::DownT};
 
   static constexpr size_t SPAWNABLE_COUNT{sizeof(SPAWNABLE) /
                                           sizeof(PieceType)};
@@ -54,6 +61,10 @@ public:
       {true, true, false, false, true, true}, // VerticalZigZag
       {true, false, true, true, false, true}, // HorizontalZigZagMirror
       {false, true, true, true, true, false}, // VerticalZigZagMirror
+      {false, true, true, true, false, true}, // UpT
+      {false, true, false, true, true, true}, // RightT
+      {true, false, true, true, true, false}, // DownT
+      {true, true, true, false, true, false}, // LeftT
   };
 
 private:
@@ -89,6 +100,16 @@ public:
     case PieceType::HorizontalZigZagMirror:
       area = LMG::Rect(2, 4, 10, 11);
       break;
+    case PieceType::RightT:
+      [[fallthrough]];
+    case PieceType::LeftT:
+      ptype = PieceType::UpT;
+      [[fallthrough]];
+    case PieceType::UpT:
+      [[fallthrough]];
+    case PieceType::DownT:
+      area = LMG::Rect(2, 4, 10, 11);
+      break;
     }
   }
 
@@ -114,6 +135,14 @@ public:
       return PieceType::HorizontalZigZagMirror;
     case PieceType::HorizontalZigZagMirror:
       return PieceType::VerticalZigZagMirror;
+    case PieceType::UpT:
+      return PieceType::RightT;
+    case PieceType::RightT:
+      return PieceType::DownT;
+    case PieceType::DownT:
+      return PieceType::LeftT;
+    case PieceType::LeftT:
+      return PieceType::UpT;
     }
   }
 };
