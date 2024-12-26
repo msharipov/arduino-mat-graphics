@@ -40,15 +40,23 @@ public:
     RightT,
     DownT,
     LeftT,
+    UpL,
+    RightL,
+    DownL,
+    LeftL,
   };
 
   /// These types can be spawned by randomPiece
-  static constexpr PieceType SPAWNABLE[] = {PieceType::Block,
-                                            PieceType::HorizontalBar,
-                                            PieceType::HorizontalZigZag,
-                                            PieceType::HorizontalZigZagMirror,
-                                            PieceType::UpT,
-                                            PieceType::DownT};
+  static constexpr PieceType SPAWNABLE[] = {
+      PieceType::Block,
+      PieceType::HorizontalBar,
+      PieceType::HorizontalZigZag,
+      PieceType::HorizontalZigZagMirror,
+      PieceType::UpT,
+      PieceType::DownT,
+      PieceType::RightL,
+      PieceType::LeftL,
+  };
 
   static constexpr size_t SPAWNABLE_COUNT{sizeof(SPAWNABLE) /
                                           sizeof(PieceType)};
@@ -65,6 +73,10 @@ public:
       {false, true, false, true, true, true}, // RightT
       {true, false, true, true, true, false}, // DownT
       {true, true, true, false, true, false}, // LeftT
+      {true, true, true, true, false, false}, // UpL
+      {true, true, false, true, false, true}, // RightL
+      {false, false, true, true, true, true}, // DownL
+      {true, false, true, false, true, true}, // LeftL
   };
 
 private:
@@ -110,6 +122,16 @@ public:
     case PieceType::DownT:
       area = LMG::Rect(2, 4, 10, 11);
       break;
+    case PieceType::UpL:
+      [[fallthrough]];
+    case PieceType::DownL:
+      ptype = PieceType::RightL;
+      [[fallthrough]];
+    case PieceType::RightL:
+      [[fallthrough]];
+    case PieceType::LeftL:
+      area = LMG::Rect(2, 4, 10, 11);
+      break;
     }
   }
 
@@ -143,6 +165,14 @@ public:
       return PieceType::LeftT;
     case PieceType::LeftT:
       return PieceType::UpT;
+    case PieceType::UpL:
+      return PieceType::RightL;
+    case PieceType::RightL:
+      return PieceType::DownL;
+    case PieceType::DownL:
+      return PieceType::LeftL;
+    case PieceType::LeftL:
+      return PieceType::UpL;
     }
   }
 };
