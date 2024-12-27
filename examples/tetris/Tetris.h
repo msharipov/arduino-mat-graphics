@@ -44,6 +44,10 @@ public:
     RightL,
     DownL,
     LeftL,
+    UpLMirror,
+    RightLMirror,
+    DownLMirror,
+    LeftLMirror,
   };
 
   /// These types can be spawned by randomPiece
@@ -56,6 +60,8 @@ public:
       PieceType::DownT,
       PieceType::RightL,
       PieceType::LeftL,
+      PieceType::RightLMirror,
+      PieceType::LeftLMirror,
   };
 
   static constexpr size_t SPAWNABLE_COUNT{sizeof(SPAWNABLE) /
@@ -77,6 +83,10 @@ public:
       {true, true, false, true, false, true}, // RightL
       {false, false, true, true, true, true}, // DownL
       {true, false, true, false, true, true}, // LeftL
+      {true, false, false, true, true, true}, // UpLMirror
+      {true, true, true, false, true, false}, // RightLMirror
+      {true, true, true, false, false, true}, // DownLMirror
+      {false, true, false, true, true, true}, // LeftLMirror
   };
 
 private:
@@ -132,6 +142,16 @@ public:
     case PieceType::LeftL:
       area = LMG::Rect(2, 4, 10, 11);
       break;
+    case PieceType::UpLMirror:
+      [[fallthrough]];
+    case PieceType::DownLMirror:
+      ptype = PieceType::RightLMirror;
+      [[fallthrough]];
+    case PieceType::RightLMirror:
+      [[fallthrough]];
+    case PieceType::LeftLMirror:
+      area = LMG::Rect(2, 4, 10, 11);
+      break;
     }
   }
 
@@ -173,6 +193,14 @@ public:
       return PieceType::LeftL;
     case PieceType::LeftL:
       return PieceType::UpL;
+    case PieceType::UpLMirror:
+      return PieceType::RightLMirror;
+    case PieceType::RightLMirror:
+      return PieceType::DownLMirror;
+    case PieceType::DownLMirror:
+      return PieceType::LeftLMirror;
+    case PieceType::LeftLMirror:
+      return PieceType::UpLMirror;
     }
   }
 };
