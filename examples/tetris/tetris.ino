@@ -30,6 +30,8 @@ bool rotate_button_pushed{false};
 bool shift_left_button_pushed{false};
 bool shift_right_button_pushed{false};
 
+/// Wire up buttons to these pins such that pushing the button sets the pin to
+/// high.
 constexpr pin_size_t DROP_PIECE_BUTTON{2};
 constexpr pin_size_t ROTATE_PIECE_BUTTON{3};
 constexpr pin_size_t SHIFT_LEFT_BUTTON{4};
@@ -43,6 +45,7 @@ void setup() {
   pinMode(SHIFT_RIGHT_BUTTON, INPUT);
 }
 
+/// Draws the current game score to the screen
 void drawScore() {
   using LMG::Frame, LMG::Rect;
   Frame score_screen{};
@@ -58,10 +61,12 @@ void drawScore() {
 
 void loop() {
   using LMG::Frame;
+
   if (game.isGameOver()) {
     drawScore();
     return;
   }
+
   // Controls for piece rotation
   if (digitalRead(ROTATE_PIECE_BUTTON) == HIGH) {
     if (!rotate_button_pushed) {
@@ -95,7 +100,13 @@ void loop() {
   if (digitalRead(DROP_PIECE_BUTTON) == HIGH) {
     game.tryDescend();
   }
+
+  // Update the game state
   game.nextTick();
+
+  // Create a frame that shows the placed pieces
   placed = game.drawPlaced();
+
+  // Combine the placed pieces with the active piece and update the screen
   matrix.loadFrame((placed + game.drawActive()).getData());
 }
