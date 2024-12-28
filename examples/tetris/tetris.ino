@@ -43,6 +43,11 @@ void setup() {
   pinMode(ROTATE_PIECE_BUTTON, INPUT);
   pinMode(SHIFT_LEFT_BUTTON, INPUT);
   pinMode(SHIFT_RIGHT_BUTTON, INPUT);
+  /// Get a random seed for the RNG
+  pinMode(A2, INPUT);
+  srand(analogRead(A2));
+  /// Reset the game with the new RNG seed
+  game.reset();
 }
 
 /// Draws the current game score to the screen

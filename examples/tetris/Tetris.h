@@ -241,6 +241,21 @@ public:
   /// automatically.
   static constexpr uint32_t TICKS_PER_DESCENT{10};
 
+  /// Resets the game by clearing the board and the score
+  void reset() {
+    for (auto& row : placed_pieces) {
+      for (auto& cell : row) {
+        cell = false;
+      }
+    }
+    current_piece = Piece::randomPiece();
+    current_tick = 0;
+    clearing_lines = false;
+    line_to_check = 0;
+    game_over = false;
+    score = 0;
+  }
+
   /// Checks if the currently active piece can descend.
   /**
    * @returns True, if the piece can descend. False, if it reached the bottom
