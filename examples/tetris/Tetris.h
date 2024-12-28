@@ -67,6 +67,7 @@ public:
   static constexpr size_t SPAWNABLE_COUNT{sizeof(SPAWNABLE) /
                                           sizeof(PieceType)};
 
+  /// Stores sprites for every piece in the game
   static constexpr bool SPRITES[][6] = {
       {true, true, true, true},               // Block
       {true, true, true, true},               // HorizontalBar
@@ -90,7 +91,10 @@ public:
   };
 
 private:
+  /// Type of the piece
   PieceType ptype{};
+
+  /// Area on the screen that the piece occupies
   LMG::Rect area{0, 0, 0, 0};
 
 public:
@@ -487,7 +491,9 @@ public:
     return full;
   }
 
+  /// Checks if the game is over
   bool isGameOver() { return game_over; }
 
+  /// Returns the current score
   uint32_t getScore() { return score; }
 };
