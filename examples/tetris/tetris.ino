@@ -47,15 +47,19 @@ void setup() {
 
 /// Draws the current game score to the screen
 void drawScore() {
-  using LMG::Frame, LMG::Rect;
+  using LMG::Frame, LMG::Rect, LMG::DEFAULT_FONT_3x5;
   Frame score_screen{};
   const uint32_t score = game.getScore();
+  constexpr size_t DIGITS_OFFSET{29};
   const size_t ones = score % 10;
-  score_screen.drawSprite(LMG::DIGITS_3x5[ones], Rect(1, 5, 9, 11));
+  score_screen.drawSprite(DEFAULT_FONT_3x5[DIGITS_OFFSET + ones],
+                          Rect(1, 5, 9, 11));
   const size_t tens = (score / 10) % 10;
-  score_screen.drawSprite(LMG::DIGITS_3x5[tens], Rect(1, 5, 5, 7));
+  score_screen.drawSprite(DEFAULT_FONT_3x5[DIGITS_OFFSET + tens],
+                          Rect(1, 5, 5, 7));
   const size_t hundreds = (score / 100) % 10;
-  score_screen.drawSprite(LMG::DIGITS_3x5[hundreds], Rect(1, 5, 1, 3));
+  score_screen.drawSprite(DEFAULT_FONT_3x5[DIGITS_OFFSET + hundreds],
+                          Rect(1, 5, 1, 3));
   matrix.loadFrame(score_screen.getData());
 }
 
