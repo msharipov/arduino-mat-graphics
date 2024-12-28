@@ -121,7 +121,7 @@ void Frame::drawSprite(const bool *data, const Rect &area) {
   }
 }
 
-const bool DIGITS_3x5[39][15] = {
+const bool DEFAULT_FONT_3x5[39][15] = {
     {0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1}, // A
     {1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1}, // B
     {0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1}, // C
