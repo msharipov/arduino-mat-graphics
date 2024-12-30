@@ -23,5 +23,5 @@ drawSprite	KEYWORD2
 ##################################################
 # Constants
 ##################################################
-DIGITS_3x5	LITERAL1
+DEFAULT_FONT_3x5	LITERAL1
 DEFAULT_FONT_3x4	LITERAL1
