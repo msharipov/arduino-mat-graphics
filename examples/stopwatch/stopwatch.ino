@@ -19,32 +19,47 @@
  *  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  *  IN THE SOFTWARE.
  */
-#include "Arduino_LED_Matrix.h"
-#include <stdint.h>
-#include <LED_Matrix_Graphics.h>
 
-ArduinoLEDMatrix matrix;
-LMG::Frame frame;
-uint32_t start;
+/*
+ *  Displays a stopwatch on the LED matrix that counts up to 100 seconds before
+ *  looping back to zero.
+ */
+#include "Arduino_LED_Matrix.h"
+#include <LED_Matrix_Graphics.h>
+#include <stdint.h>
+
+ArduinoLEDMatrix matrix{};
+LMG::Frame frame{};
+uint32_t start{0};
 
 void setup() {
   matrix.begin();
   start = millis();
-  frame.set_bit(3, 4, 1);
+
+  // Draw the decimal point
+  frame.setLED(5, 7, HIGH);
 }
 
 void loop() {
-  uint32_t diff = millis() - start;
-  uint8_t X = (diff / 10000) % 10,
-          Y = (diff / 1000) % 10,
-          Z = (diff / 100) % 10;
-  
-  if (X == 0) {
-    frame.fill_rect(3, 9, 7, 11, 0);
+  using LMG::Rect;
+
+  constexpr size_t DIGITS_OFFSET = 29;
+  const uint32_t diff = millis() - start;
+  const size_t tens_of_seconds = (diff / 10000) % 10;
+  const size_t seconds = (diff / 1000) % 10;
+  const size_t hundreds_of_ms = (diff / 100) % 10;
+  // Offset at which the digit sprites are stored
+
+  if (tens_of_seconds == 0) {
+    // Don't display the first digit if the time is less than 10 seconds.
+    frame.fillRect(Rect(1, 5, 0, 2), LOW);
   } else {
-    frame.put_sym(LMG::DIGITS_35[X], 3, 9, 3, 5);
+    frame.drawSprite(LMG::DEFAULT_FONT_3x5[tens_of_seconds + DIGITS_OFFSET],
+                     Rect(1, 5, 0, 2));
   }
-  frame.put_sym(LMG::DIGITS_35[Y], 3, 5, 3, 5);
-  frame.put_sym(LMG::DIGITS_35[Z], 3, 0, 3, 5);
+  frame.drawSprite(LMG::DEFAULT_FONT_3x5[seconds + DIGITS_OFFSET],
+                   Rect(1, 5, 4, 6));
+  frame.drawSprite(LMG::DEFAULT_FONT_3x5[hundreds_of_ms + DIGITS_OFFSET],
+                   Rect(1, 5, 9, 11));
   matrix.loadFrame(frame.getData());
 }
