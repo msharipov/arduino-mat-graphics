@@ -43,12 +43,12 @@ void setup() {
 void loop() {
   using LMG::Rect;
 
+  // Offset at which the digit sprites are stored
   constexpr size_t DIGITS_OFFSET = 29;
   const uint32_t diff = millis() - start;
   const size_t tens_of_seconds = (diff / 10000) % 10;
   const size_t seconds = (diff / 1000) % 10;
   const size_t hundreds_of_ms = (diff / 100) % 10;
-  // Offset at which the digit sprites are stored
 
   if (tens_of_seconds == 0) {
     // Don't display the first digit if the time is less than 10 seconds.
