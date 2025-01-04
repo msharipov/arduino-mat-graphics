@@ -19,9 +19,9 @@
  *  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  *  IN THE SOFTWARE.
  */
- 
+
 /* This program allows you to quickly measure voltage using the Arduino. The
- * program will display the potential difference between pins A1 and A2 as a
+ * program will display the potential difference between pins A0 and A1 as a
  * fraction of the difference between 5V and GND on the LED matrix. If the
  * difference happens to be negative, a minus sign will also be displayed.
  */
@@ -30,47 +30,57 @@
 #include <LED_Matrix_Graphics.h>
 #include <cstdint>
 
-ArduinoLEDMatrix matrix;
-LMG::Frame frame;
+ArduinoLEDMatrix matrix{};
+LMG::Frame frame{};
 
 void setup() {
   matrix.begin();
   pinMode(A0, INPUT);
   pinMode(A1, INPUT);
-  Serial.begin(9600);
 }
 
 void loop() {
+  using LMG::Rect;
+  const size_t DIGITS_OFFSET{29};
+  const Rect FIRST_DIGIT{0, 4, 1, 3};
+  const Rect SECOND_DIGIT{0, 4, 5, 7};
+  const Rect THIRD_DIGIT{0, 4, 9, 11};
+  const Rect FIRST_DIGIT_ALTERNATE{0, 4, 0, 2};
+  const Rect NEGATIVE_SIGN{6, 6, 8, 10};
 
   int16_t rel_voltage = analogRead(A0) - analogRead(A1);
-  bool negative = (rel_voltage < 0);
+  const bool negative = (rel_voltage < 0);
 
   if (negative) {
     rel_voltage = -rel_voltage;
   }
 
-  uint8_t X = rel_voltage * 10 / 1023, Y = rel_voltage * 100 / 1023 % 10,
-          Z = rel_voltage * 1000 / 1023 % 10;
+  const uint8_t first = rel_voltage * 10 / 1023;
+  const uint8_t second = rel_voltage * 100 / 1023 % 10;
+  const uint8_t third = rel_voltage * 1000 / 1023 % 10;
 
-  frame.fill_rect(0, 7, 0, 11, 0);
+  frame.fillRect(
+      Rect(0, LMG::LED_MATRIX_HEIGHT - 1, 0, LMG::LED_MATRIX_WIDTH - 1), LOW);
 
   if (rel_voltage == 1023) {
 
-    frame.put_sym(LMG::DIGITS_35[1], 3, 9, 3, 5);
-    frame.set_bit(3, 7, 1);
-    frame.put_sym(LMG::DIGITS_35[0], 3, 4, 3, 5);
-    frame.put_sym(LMG::DIGITS_35[0], 3, 0, 3, 5);
+    frame.drawSprite(LMG::DEFAULT_FONT_3x5[DIGITS_OFFSET + 1],
+                     FIRST_DIGIT_ALTERNATE);
+    frame.setLED(4, 3, HIGH);
+    frame.drawSprite(LMG::DEFAULT_FONT_3x5[DIGITS_OFFSET], SECOND_DIGIT);
+    frame.drawSprite(LMG::DEFAULT_FONT_3x5[DIGITS_OFFSET], THIRD_DIGIT);
 
   } else {
 
-    frame.set_bit(3, 11, 1);
-    frame.put_sym(LMG::DIGITS_35[X], 3, 8, 3, 5);
-    frame.put_sym(LMG::DIGITS_35[Y], 3, 4, 3, 5);
-    frame.put_sym(LMG::DIGITS_35[Z], 3, 0, 3, 5);
+    frame.setLED(4, 0, HIGH);
+    frame.drawSprite(LMG::DEFAULT_FONT_3x5[DIGITS_OFFSET + first], FIRST_DIGIT);
+    frame.drawSprite(LMG::DEFAULT_FONT_3x5[DIGITS_OFFSET + second],
+                     SECOND_DIGIT);
+    frame.drawSprite(LMG::DEFAULT_FONT_3x5[DIGITS_OFFSET + third], THIRD_DIGIT);
   }
 
   if (negative) {
-    frame.fill_rect(1, 8, 1, 10, 1);
+    frame.fillRect(NEGATIVE_SIGN, HIGH);
   }
 
   matrix.loadFrame(frame.getData());
